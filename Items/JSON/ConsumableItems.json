@@ -1,0 +1,12 @@
+{
+    "0": {
+        "Name": "Health Potion I",
+        "Description": "Heals you.",
+        "Texture": "res://Assets/Items/HealthPotionI.tres"
+    },
+    "1": {
+        "Name": "Mana Potion I",
+        "Description": "Increases your mana.",
+        "Texture": "res://Assets/Items/ManaPotionI.tres"
+    }
+}

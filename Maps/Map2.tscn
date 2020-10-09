@@ -1,0 +1,42 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://TileSets/SnowyTileSet.tres" type="TileSet" id=1]
+[ext_resource path="res://Maps/Map2.gd" type="Script" id=2]
+[ext_resource path="res://Doors/DoorToStage.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Main/Camera.tscn" type="PackedScene" id=4]
+
+[node name="Map2" type="Node2D" groups=[
+"Player",
+]]
+script = ExtResource( 2 )
+
+[node name="Camera" parent="." instance=ExtResource( 4 )]
+
+[node name="StartPosition" type="Position2D" parent="."]
+position = Vector2( 1134.61, 66.742 )
+__meta__ = {
+"_edit_lock_": true,
+"_gizmo_extents_": 30.0
+}
+
+[node name="Background" type="Node2D" parent="."]
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Walls" type="TileMap" parent="Background"]
+scale = Vector2( 4, 4 )
+tile_set = ExtResource( 1 )
+cell_size = Vector2( 16, 16 )
+collision_layer = 4
+collision_mask = 10
+format = 1
+tile_data = PoolIntArray( 12, 0, 0, 13, 0, 2, 20, 0, 0, 21, 0, 2, 65548, 0, 131072, 65549, 0, 131074, 65556, 0, 131072, 65557, 0, 131074, 131088, 0, 0, 131089, 0, 1, 131090, 0, 2, 196624, 0, 65536, 196625, 0, 65537, 196626, 0, 65538, 262147, 0, 0, 262148, 0, 1, 262149, 0, 1, 262150, 0, 1, 262151, 0, 1, 262152, 0, 1, 262153, 0, 1, 262154, 0, 1, 262155, 0, 1, 262156, 0, 1, 262157, 0, 1, 262158, 0, 2, 262160, 0, 65536, 262161, 0, 65537, 262162, 0, 65538, 262164, 0, 0, 262165, 0, 1, 262166, 0, 1, 262167, 0, 1, 262168, 0, 2, 327683, 0, 65536, 327684, 0, 65537, 327685, 0, 65537, 327686, 0, 65537, 327687, 0, 65537, 327688, 0, 65537, 327689, 0, 65537, 327690, 0, 65537, 327691, 0, 65537, 327692, 0, 65537, 327693, 0, 65537, 327694, 0, 65538, 327696, 0, 65536, 327697, 0, 65537, 327698, 0, 65538, 327700, 0, 65536, 327701, 0, 65537, 327702, 0, 65537, 327703, 0, 65537, 327704, 0, 65538, 393219, 0, 131072, 393220, 0, 131073, 393221, 0, 131073, 393222, 0, 131073, 393223, 0, 131073, 393224, 0, 131073, 393225, 0, 131073, 393226, 0, 131073, 393227, 0, 131073, 393228, 0, 131073, 393229, 0, 131073, 393230, 0, 131074, 393232, 0, 131072, 393233, 0, 131073, 393234, 0, 131074, 393236, 0, 131072, 393237, 0, 131073, 393238, 0, 131073, 393239, 0, 131073, 393240, 0, 131074 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="DoorToStage" parent="." instance=ExtResource( 3 )]
+position = Vector2( 1124, 64 )
+scale = Vector2( 4, 4 )
+target_stage = "Map1"

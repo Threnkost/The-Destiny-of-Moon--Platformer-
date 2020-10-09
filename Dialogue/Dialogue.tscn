@@ -1,0 +1,47 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://Dialogue/Dialogue.gd" type="Script" id=1]
+[ext_resource path="res://Fonts/joystix monospace.ttf" type="DynamicFontData" id=2]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.0862745, 0.0862745, 0.0862745, 0.843137 )
+
+[sub_resource type="DynamicFont" id=2]
+font_data = ExtResource( 2 )
+
+[node name="Dialogue" type="Panel"]
+anchor_left = 0.021
+anchor_top = 0.567
+anchor_right = 0.976
+anchor_bottom = 0.971
+margin_left = -0.12241
+margin_top = 0.12326
+margin_right = -0.0424805
+margin_bottom = -0.276794
+custom_styles/panel = SubResource( 1 )
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="Text" type="RichTextLabel" parent="."]
+margin_left = 9.0
+margin_top = 10.0
+margin_right = 488.0
+margin_bottom = 120.0
+rect_scale = Vector2( 2, 2 )
+custom_fonts/normal_font = SubResource( 2 )
+bbcode_enabled = true
+bbcode_text = "Name:
+
+Hello World"
+text = "Name:
+
+Hello World"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Tween" type="Tween" parent="."]
+[connection signal="tween_all_completed" from="Tween" to="." method="_on_Tween_tween_all_completed"]
