@@ -1,10 +1,11 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Main/Main.gd" type="Script" id=1]
 [ext_resource path="res://Maps/Chapter1/Chapter1TrainingScene.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Main/StageManager.gd" type="Script" id=3]
 [ext_resource path="res://Player/Player.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Inventory/Inventory.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Maps/TestStage.tscn" type="PackedScene" id=6]
 [ext_resource path="res://UI/UI.tscn" type="PackedScene" id=7]
 
 [node name="Main" type="Node2D"]
@@ -21,9 +22,11 @@ jumping_force = 750.0
 [node name="StageManager" type="Node2D" parent="."]
 visible = false
 script = ExtResource( 3 )
-initial_stage_path = NodePath("Chapter1TrainingScene")
+initial_stage_path = NodePath("TestStage")
 
 [node name="Chapter1TrainingScene" parent="StageManager" instance=ExtResource( 2 )]
+
+[node name="TestStage" parent="StageManager" instance=ExtResource( 6 )]
 
 [node name="UI" type="CanvasLayer" parent="."]
 

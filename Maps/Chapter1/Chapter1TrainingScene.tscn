@@ -98,6 +98,7 @@ __meta__ = {
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Background/Wall"]
 position = Vector2( -347.607, 248.719 )
 shape = SubResource( 2 )
+disabled = true
 
 [node name="Wall2" type="StaticBody2D" parent="Background"]
 collision_layer = 4

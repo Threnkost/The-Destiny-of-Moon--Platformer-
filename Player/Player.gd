@@ -10,12 +10,21 @@ enum {
 	ATTACKING
 }
 
+#MECHANICS
 onready var state_machine_player
 
-var current_state = MOVING
+var current_state = MOVING setget set_state
+
 var can_jump := true
 var can_move := true
+var is_jumoing := false
 var active_camera : Camera2D
+
+var attack_cooldown := false setget set_attack_cooldown
+var attack_count := 0 setget set_attack_index
+
+#PROPORTIONS
+onready var normal_attack_proportions := [1.0, 1.15, 1.3]
 
 func _ready():
 	state_machine_player = $AnimationTree.get("parameters/playback")
@@ -27,33 +36,34 @@ func _ready():
 	.emit_signal("mana_point_changed", mana_point, max_mana_point)
 
 func _physics_process(delta):
+	$AnimationPlayer.playback_speed = 1.0
 
 	if _is_top_raycasts_colliding():
-		#velocity.y = GRAVITY * 3
 		velocity.y = abs(velocity.y) / 1.5
 
 	velocity.y += GRAVITY
 	if velocity.y >= MAX_GRAVITY:
 		velocity.y = MAX_GRAVITY
 
-	if velocity.x > 0:
-		self.direction = 1
-	elif velocity.x < 0:
-		self.direction = -1
-
 	if _is_bottom_raycasts_colliding():
 		velocity.y = 0
 
 	if Input.is_action_just_pressed("Jump") and can_jump and _is_bottom_raycasts_colliding():
-		velocity.y = -jumping_force
-	
+		if bad_state != bad_states.STUNNED:
+			velocity.y = -jumping_force		
+
 	_check_direction()
 	_handle_inputs()
 	_handle_states(delta)
+	_handle_sliding()
+	_debug()
 
 	move_and_slide(velocity, Vector2.UP)
 
 func _check_direction():
+	$FirstAttackHitbox.scale.x  = direction
+	$SecondAttackHitbox.scale.x = direction
+	$ThirdAttackHitbox.scale.x  = direction
 	match self.direction:
 		1:
 			$Sprite.flip_h = false
@@ -64,6 +74,13 @@ func _handle_inputs():
 	if Input.is_action_just_pressed("OpenInventory"):
 		Global.inventory.visible = !Global.inventory.visible
 	
+	if Input.is_action_pressed("Attack") and current_state != ATTACKING and not attack_cooldown:
+		if bad_state != bad_states.STUNNED:
+			current_state = ATTACKING
+
+	if Input.is_action_just_pressed("DamageMyself"):
+		damage(null, 1)
+
 	if active_camera:
 		if Input.is_action_pressed("LookUp"):
 			active_camera.pos_offset = Vector2(0, -LOOK_UP_DISTANCE)
@@ -71,6 +88,9 @@ func _handle_inputs():
 			active_camera.pos_offset = Vector2.ZERO
 
 func _handle_states(delta):
+	if bad_state == bad_states.STUNNED:
+		state_machine_player.travel("Stunned")
+		return
 	match current_state:
 		MOVING:
 			_move()
@@ -78,11 +98,25 @@ func _handle_states(delta):
 			_attack()
 
 func _attack():
-	pass
+	velocity.x = 0
+	match attack_count:
+		0:
+			$AnimationPlayer.playback_speed = stats.get_stat_amount("AttackSpeed")
+			state_machine_player.travel("Attack1")
+			$Timers/AttackCombinationTimer.start()
+		1:
+			$AnimationPlayer.playback_speed = stats.get_stat_amount("AttackSpeed")
+			state_machine_player.travel("Attack2")
+			$Timers/AttackCombinationTimer.stop()
 
 func _move():
 	velocity.x = Input.get_action_strength("MoveRight") - Input.get_action_strength("MoveLeft")
 	velocity.x *= speed * int(can_move)
+
+	if velocity.x > 0:
+		self.direction = 1
+	elif velocity.x < 0:
+		self.direction = -1
 
 	if velocity.x != 0:
 		state_machine_player.travel("Running")
@@ -95,10 +129,13 @@ func _is_top_raycasts_colliding() -> bool:
 func _is_bottom_raycasts_colliding() -> bool:
 	return $GravityRayCast.is_colliding() or $GravityRayCast2.is_colliding() or $GravityRayCast3.is_colliding()
 
+func damage(damager, damage):
+	set_health(health_point - damage)
+
 func die() -> void:
 	.die()
-	is_alive = true
-	
+	life_state = life_states.LIVING
+
 	if Global.last_check_point["map_name"] != "invalid":
 		if Global.current_stage.name != Global.last_check_point["map_name"]:
 			Global.stage_manager.change_stage(Global.last_check_point["map_name"])	
@@ -106,3 +143,41 @@ func die() -> void:
 	else:
 		global_position = Global.current_stage.get_node("StartPosition").global_position
 		#Temporary
+
+func set_state(new_state : int):
+	current_state = new_state
+
+func set_attack_index(new_index : int):
+	attack_count = new_index
+
+func set_attack_cooldown(is_in_cooldown : bool):
+	attack_cooldown = is_in_cooldown
+
+func _on_AttackCombinationTimer_timeout():
+	attack_count = 0
+
+func _attack_if_enemy(body:Node, damage := 0, index := 0):
+	if body.is_in_group("Enemy"):
+		var total_damage = damage * normal_attack_proportions[index]
+		var value_to_heal = total_damage * stats.get_stat_amount("LifeSteal")
+		body.damage(self, total_damage)
+		set_health(health_point + value_to_heal)
+		print("Attacked : ", body.name, " value : ", total_damage)
+
+func _on_CombinationCooldown_timeout():
+	attack_cooldown = false
+
+func _on_RightHitbox_body_entered(body):
+	_attack_if_enemy(body, stats.get_stat_amount("AttackDamage"), 0)
+
+func _on_SecondAttackHitbox_body_entered(body):
+	_attack_if_enemy(body, stats.get_stat_amount("AttackDamage"), 1)
+
+func _on_ThirdAttackHitbox_body_entered(body):
+	_attack_if_enemy(body, stats.get_stat_amount("AttackDamage"), 2)
+
+func _debug():
+	if not debug_mode:
+		return
+	
+	$Stunned.visible = bad_state == bad_states.STUNNED

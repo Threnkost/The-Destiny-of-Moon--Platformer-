@@ -1,0 +1,130 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://Assets/Sheets/Enemy/Idle.png" type="Texture" id=1]
+[ext_resource path="res://Enemies/BasicEnemy.gd" type="Script" id=2]
+[ext_resource path="res://Assets/UI/health_bar.png" type="Texture" id=3]
+
+[sub_resource type="Animation" id=4]
+resource_name = "Death"
+length = 0.5
+tracks/0/type = "method"
+tracks/0/path = NodePath(".")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0.50329 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "queue_free"
+} ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Sprite:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0.0101881, 0.493102 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 0.0313726, 0.0313726, 0.0313726, 1 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("HealthBar:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0.0142633, 0.495139 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("Label:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0.0142633, 0.497177 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
+
+[sub_resource type="Animation" id=2]
+resource_name = "Idle"
+length = 0.4
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 0, 1, 2, 3 ]
+}
+
+[sub_resource type="CapsuleShape2D" id=3]
+radius = 36.531
+height = 95.4199
+
+[node name="BasicEnemy" type="KinematicBody2D"]
+collision_layer = 8
+collision_mask = 64
+script = ExtResource( 2 )
+max_health_point = 15000
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+autoplay = "Idle"
+anims/Death = SubResource( 4 )
+anims/Idle = SubResource( 2 )
+
+[node name="Sprite" type="Sprite" parent="."]
+modulate = Color( 0.986076, 0.986076, 0.986076, 1 )
+scale = Vector2( 3, 3 )
+texture = ExtResource( 1 )
+hframes = 4
+frame = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( 10.3181, 3.1748 )
+shape = SubResource( 3 )
+
+[node name="HealthBar" type="TextureProgress" parent="."]
+modulate = Color( 1, 1, 1, 0.994038 )
+margin_left = -51.857
+margin_top = 84.9487
+margin_right = 65.143
+margin_bottom = 100.949
+value = 50.0
+texture_under = ExtResource( 3 )
+texture_progress = ExtResource( 3 )
+tint_under = Color( 0.564706, 0.0588235, 0.309804, 1 )
+tint_progress = Color( 0.933333, 0.0980392, 0.333333, 1 )
+nine_patch_stretch = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="."]
+modulate = Color( 1, 1, 1, 0.994063 )
+margin_left = -20.2953
+margin_top = 87.2941
+margin_right = 32.7047
+margin_bottom = 101.294
+text = "100/100"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
