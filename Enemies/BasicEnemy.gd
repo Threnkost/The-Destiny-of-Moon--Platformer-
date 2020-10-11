@@ -1,8 +1,10 @@
 extends Entity
 
+export (float) var speed = 300
 export (int) var ai_react_time = 400
 
 var player_in := false
+var dir
 var next_direction
 var next_time
 
@@ -32,3 +34,21 @@ func _physics_process(delta):
 	$Label.text = "%s/%s" % [health_point, max_health_point]
 
 	_handle_sliding()
+
+	if player_in:
+		if Global.player.global_position.x < global_position.x - 60:
+			set_ai_direction(-1)
+		elif Global.player.global_position.x > global_position.x + 60:
+			set_ai_direction(1)
+		else:
+			set_ai_direction(0)
+		
+		if OS.get_ticks_msec() > next_time:
+			dir = next_direction
+			velocity.x = dir * 300
+
+	move_and_slide(velocity)
+
+func _on_PlayerDetection_body_entered(body):
+	if body.is_in_group("Player"):
+		player_in = false

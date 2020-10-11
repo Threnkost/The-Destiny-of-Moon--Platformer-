@@ -38,3 +38,4 @@ __meta__ = {
 "Enemy",
 ] instance=ExtResource( 5 )]
 position = Vector2( -478.628, 430.668 )
+speed = 200.0
