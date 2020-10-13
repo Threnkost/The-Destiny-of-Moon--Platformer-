@@ -1,0 +1,4 @@
+[Current Bugs]
+1) Kayarken oyuncu iki blok arasında sıkışıp kalabiliyor.
+
+[Fixed Bugs]

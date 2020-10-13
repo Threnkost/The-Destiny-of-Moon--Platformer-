@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/adventurer-Sheet.png-a218d86aa2b656dbc730df86ac93681d.stex"
+path="res://.import/clouds_mg_2.png-269f792c912173f31489ad5052bd3ccb.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Sheets/Player/adventurer-Sheet.png"
-dest_files=[ "res://.import/adventurer-Sheet.png-a218d86aa2b656dbc730df86ac93681d.stex" ]
+source_file="res://Assets/Backgrounds/Test/clouds_mg_2.png"
+dest_files=[ "res://.import/clouds_mg_2.png-269f792c912173f31489ad5052bd3ccb.stex" ]
 
 [params]
 

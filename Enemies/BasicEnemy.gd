@@ -10,7 +10,7 @@ var next_time
 
 func _ready():
 	direction = -1
-	$Sprite.flip_h = true
+	$HealthBar.modulate = Color(1,1,1,0)
 
 func set_ai_direction(target_direction):
 	if target_direction != next_direction:
@@ -20,8 +20,11 @@ func set_ai_direction(target_direction):
 func die():
 	$AnimationPlayer.play("Death")
 
-func damage(damager, damage):
-	slide(Vector2(750,0), Vector2(0,0), Vector2(0.2,0), Vector2(damager.direction, 0))
+func damage(damager, damage, push_scale:=1):
+	slide(Vector2(300*push_scale,0), Vector2(0,0), Vector2(0.2,0), Vector2(damager.direction, 0))
+
+	$HealthBar.modulate = Color(1,1,1,1)
+	$Timers/HealthBarDelay.start()
 
 	health_point -= damage
 	if health_point <= 0:
@@ -32,6 +35,12 @@ func _physics_process(delta):
 	$HealthBar.value     = health_point
 
 	$Label.text = "%s/%s" % [health_point, max_health_point]
+
+	velocity.y += GRAVITY
+	if velocity.y >= MAX_GRAVITY:
+		velocity.y = MAX_GRAVITY
+	if $BottomRaycast1.is_colliding():
+		velocity.y = 0
 
 	_handle_sliding()
 
@@ -47,8 +56,14 @@ func _physics_process(delta):
 			dir = next_direction
 			velocity.x = dir * 300
 
-	move_and_slide(velocity)
+	velocity.y = move_and_slide_with_snap(get_total_velocity(), 8.0*Vector2.DOWN, 
+		Vector2.UP, true, 4, deg2rad(45.1)).y
+	#move_and_slide(get_total_velocity())
 
 func _on_PlayerDetection_body_entered(body):
 	if body.is_in_group("Player"):
 		player_in = false
+
+func _on_HealthBarDelay_timeout():
+	$Tween.interpolate_property($HealthBar, "modulate", Color(1,1,1,1), Color(1,1,1,0), 0.5, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+	$Tween.start()

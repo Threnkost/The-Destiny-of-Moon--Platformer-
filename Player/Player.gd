@@ -2,12 +2,17 @@ extends Entity
 
 const LOOK_UP_DISTANCE = 150
 
+const SNAP_LENGTH = 8.0
+const SNAP_DIRECTION = Vector2.DOWN
+
 export (float) var speed = 1
+export (float) var tumbling_speed = 1
 export (float) var jumping_force = 1
 
 enum {
 	MOVING,
-	ATTACKING
+	ATTACKING,
+	TUMBLING,
 }
 
 #MECHANICS
@@ -17,14 +22,19 @@ var current_state = MOVING setget set_state
 
 var can_jump := true
 var can_move := true
-var is_jumoing := false
+var is_jumping := false
 var active_camera : Camera2D
+
+var tumbling_cooldown := false setget set_tumbling_cooldown
 
 var attack_cooldown := false setget set_attack_cooldown
 var attack_count := 0 setget set_attack_index
 
+var snap_velocity = SNAP_LENGTH * SNAP_DIRECTION
+
 #PROPORTIONS
 onready var normal_attack_proportions := [1.0, 1.15, 1.3]
+onready var normal_attack_push_proportions := [1.0, 1.0, 2.25]
 
 func _ready():
 	state_machine_player = $AnimationTree.get("parameters/playback")
@@ -45,11 +55,13 @@ func _physics_process(delta):
 	if velocity.y >= MAX_GRAVITY:
 		velocity.y = MAX_GRAVITY
 
-	if _is_bottom_raycasts_colliding():
+	if is_on_floor():#_is_bottom_raycasts_colliding():
 		velocity.y = 0
+		snap_velocity = SNAP_LENGTH * SNAP_DIRECTION
 
-	if Input.is_action_just_pressed("Jump") and can_jump and _is_bottom_raycasts_colliding():
+	if Input.is_action_just_pressed("Jump") and can_jump and is_on_floor() and current_state != TUMBLING:
 		if bad_state != bad_states.STUNNED:
+			snap_velocity = Vector2.ZERO
 			velocity.y = -jumping_force		
 
 	_check_direction()
@@ -58,7 +70,9 @@ func _physics_process(delta):
 	_handle_sliding()
 	_debug()
 
-	move_and_slide(velocity, Vector2.UP)
+	#velocity.y = move_and_slide(velocity, Vector2.UP, true).y
+	velocity.y = move_and_slide_with_snap(get_total_velocity(), snap_velocity, 
+		Vector2.UP, true, 4, deg2rad(45.1)).y
 
 func _check_direction():
 	$FirstAttackHitbox.scale.x  = direction
@@ -78,6 +92,10 @@ func _handle_inputs():
 		if bad_state != bad_states.STUNNED:
 			current_state = ATTACKING
 
+	if Input.is_action_pressed("Tumble") and velocity.x != 0 and _is_bottom_raycasts_colliding() and not tumbling_cooldown:
+		if bad_state != bad_states.STUNNED and current_state != TUMBLING:
+			current_state = TUMBLING
+
 	if Input.is_action_just_pressed("DamageMyself"):
 		damage(null, 1)
 
@@ -96,6 +114,12 @@ func _handle_states(delta):
 			_move()
 		ATTACKING:
 			_attack()
+		TUMBLING:
+			var anim_length = $AnimationPlayer.get_animation("Tumble").length
+			var final_position = global_position.x + tumbling_speed * direction
+			print(final_position)
+			state_machine_player.travel("Tumble")
+			slide_directly_horizontal(tumbling_speed, 0, 0.2) 
 
 func _attack():
 	velocity.x = 0
@@ -124,12 +148,12 @@ func _move():
 		state_machine_player.travel("Idle")
 
 func _is_top_raycasts_colliding() -> bool:
-	return $HeadRayCast.is_colliding() or $HeadRayCast2.is_colliding() or $HeadRayCast3.is_colliding()
+	return $TopRaycast1.is_colliding()#$HeadRayCast.is_colliding() or $HeadRayCast2.is_colliding() or $HeadRayCast3.is_colliding()
 
 func _is_bottom_raycasts_colliding() -> bool:
-	return $GravityRayCast.is_colliding() or $GravityRayCast2.is_colliding() or $GravityRayCast3.is_colliding()
+	return $BottomRaycast1.is_colliding() or $BottomRaycast2.is_colliding() or $BottomRaycast3.is_colliding()#$GravityRayCast.is_colliding() or $GravityRayCast2.is_colliding() or $GravityRayCast3.is_colliding()
 
-func damage(damager, damage):
+func damage(damager, damage, push_scale:=1):
 	set_health(health_point - damage)
 
 func die() -> void:
@@ -153,19 +177,26 @@ func set_attack_index(new_index : int):
 func set_attack_cooldown(is_in_cooldown : bool):
 	attack_cooldown = is_in_cooldown
 
+func set_tumbling_cooldown(is_in_cooldown : bool):
+	tumbling_cooldown = is_in_cooldown
+
+func _on_CombinationCooldown_timeout():
+	attack_cooldown = false
+
 func _on_AttackCombinationTimer_timeout():
 	attack_count = 0
+
+func _on_TumblingCooldown_timeout():
+	tumbling_cooldown = false
 
 func _attack_if_enemy(body:Node, damage := 0, index := 0):
 	if body.is_in_group("Enemy"):
 		var total_damage = damage * normal_attack_proportions[index]
+		var push_scale   = normal_attack_push_proportions[index]
 		var value_to_heal = total_damage * stats.get_stat_amount("LifeSteal")
-		body.damage(self, total_damage)
+		body.damage(self, total_damage, push_scale)
 		set_health(health_point + value_to_heal)
 		print("Attacked : ", body.name, " value : ", total_damage)
-
-func _on_CombinationCooldown_timeout():
-	attack_cooldown = false
 
 func _on_RightHitbox_body_entered(body):
 	_attack_if_enemy(body, stats.get_stat_amount("AttackDamage"), 0)
@@ -180,4 +211,7 @@ func _debug():
 	if not debug_mode:
 		return
 	
+	#$Label.text = str($RayCast2D.is_colliding())
+	$BottomRaycastDebug.text = str(is_on_floor())#_is_bottom_raycasts_colliding())
+	$BottomRaycastDebug.visible = true
 	$Stunned.visible = bad_state == bad_states.STUNNED

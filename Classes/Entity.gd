@@ -4,8 +4,8 @@ class_name Entity
 signal health_point_changed(health_point, max_health_point)
 signal mana_point_changed(mana_point, max_mana_point)
 
-const GRAVITY = 30
-const MAX_GRAVITY = 1000
+const GRAVITY = 15
+const MAX_GRAVITY = 625
 
 enum life_states {
 	LIVING,
@@ -29,6 +29,7 @@ onready var stats
 
 var gravity_value := 0
 var velocity      := Vector2.ZERO
+var velocity2 := Vector2.ZERO
 var direction     := 1 #1 is right, -1 is left
 
 var health_point:int     = 0 setget set_health
@@ -72,7 +73,9 @@ func _handle_sliding():
 	sliding_velocity.x = lerp(sliding_velocity.x, target_sliding_velocity.x, weight_x)
 	sliding_velocity.y = lerp(sliding_velocity.y, target_sliding_velocity.y, weight_y)
 
-	move_and_slide(Vector2(sliding_velocity.x * direction_x, sliding_velocity.y * direction_y))
+	velocity2 = Vector2(sliding_velocity.x * direction_x, sliding_velocity.y * direction_y)
+	#print(sliding_velocity, target_sliding_velocity)
+	#move_and_slide(Vector2(sliding_velocity.x * direction_x, sliding_velocity.y * direction_y))
 
 func _handle_states(delta) -> void:
 	pass
@@ -86,7 +89,7 @@ func _debug() -> void:
 func die() -> void:
 	life_state = life_states.DEAD
 	
-func damage(damager, damage) -> void:
+func damage(damager, damage, push_scale:=1) -> void:
 	pass
 
 func set_health(new_health):
@@ -118,3 +121,6 @@ func set_life_state(new_state:int):
 
 func set_bad_state(new_state:int):
 	bad_state = new_state
+
+func get_total_velocity() -> Vector2:
+	return velocity + velocity2
