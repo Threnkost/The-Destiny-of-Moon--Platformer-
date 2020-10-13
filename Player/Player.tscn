@@ -435,9 +435,9 @@ collision_mask = 5
 script = ExtResource( 1 )
 max_health_point = 40
 max_mana_point = 40
-speed = 175.0
-tumbling_speed = 100.0
-jumping_force = 325.0
+speed = 170.0
+tumbling_speed = 75.0
+jumping_force = 300.0
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/Attack1 = SubResource( 1 )
@@ -510,7 +510,7 @@ material = SubResource( 26 )
 texture = ExtResource( 2 )
 vframes = 11
 hframes = 7
-frame = 1
+frame = 2
 __meta__ = {
 "_edit_lock_": true
 }
@@ -580,6 +580,12 @@ collision_mask = 8
 [node name="ThirtAttackHitbox" type="CollisionPolygon2D" parent="ThirdAttackHitbox"]
 polygon = PoolVector2Array( -3.41606, -5.25898, 13.8469, -1.09205, 24.5619, 4.26543, 24.165, 8.63078, 19.7997, 12.4009, 9.28315, 15.5757, -12.9405, 14.9804, -22.8617, 11.4087, -13.9326, 7.04338, -3.81291, 11.6072, 5.51308, 11.8056, 16.8233, 6.24968, 13.4501, 1.48748 )
 disabled = true
+
+[node name="Tumbling" type="RayCast2D" parent="."]
+position = Vector2( 0, 5 )
+enabled = true
+cast_to = Vector2( 25, 0 )
+collision_mask = 4
 [connection signal="timeout" from="Timers/AttackCombinationTimer" to="." method="_on_AttackCombinationTimer_timeout"]
 [connection signal="timeout" from="Timers/CombinationCooldown" to="." method="_on_CombinationCooldown_timeout"]
 [connection signal="timeout" from="Timers/TumblingCooldown" to="." method="_on_TumblingCooldown_timeout"]

@@ -78,6 +78,7 @@ func _check_direction():
 	$FirstAttackHitbox.scale.x  = direction
 	$SecondAttackHitbox.scale.x = direction
 	$ThirdAttackHitbox.scale.x  = direction
+	$Tumbling.scale.x = direction
 	match self.direction:
 		1:
 			$Sprite.flip_h = false
@@ -88,12 +89,12 @@ func _handle_inputs():
 	if Input.is_action_just_pressed("OpenInventory"):
 		Global.inventory.visible = !Global.inventory.visible
 	
-	if Input.is_action_pressed("Attack") and current_state != ATTACKING and not attack_cooldown:
+	if Input.is_action_pressed("Attack") && current_state != ATTACKING && !attack_cooldown:
 		if bad_state != bad_states.STUNNED:
 			current_state = ATTACKING
 
-	if Input.is_action_pressed("Tumble") and velocity.x != 0 and _is_bottom_raycasts_colliding() and not tumbling_cooldown:
-		if bad_state != bad_states.STUNNED and current_state != TUMBLING:
+	if Input.is_action_pressed("Tumble") && velocity.x != 0 && _is_bottom_raycasts_colliding() && !tumbling_cooldown:
+		if bad_state != bad_states.STUNNED && current_state != TUMBLING && !$Tumbling.is_colliding():
 			current_state = TUMBLING
 
 	if Input.is_action_just_pressed("DamageMyself"):
@@ -115,9 +116,10 @@ func _handle_states(delta):
 		ATTACKING:
 			_attack()
 		TUMBLING:
-			var anim_length = $AnimationPlayer.get_animation("Tumble").length
-			var final_position = global_position.x + tumbling_speed * direction
-			print(final_position)
+			if $Tumbling.is_colliding():
+				current_state = MOVING
+				return	
+			#var anim_length = $AnimationPlayer.get_animation("Tumble").length
 			state_machine_player.travel("Tumble")
 			slide_directly_horizontal(tumbling_speed, 0, 0.2) 
 
@@ -212,6 +214,6 @@ func _debug():
 		return
 	
 	#$Label.text = str($RayCast2D.is_colliding())
-	$BottomRaycastDebug.text = str(is_on_floor())#_is_bottom_raycasts_colliding())
+	$BottomRaycastDebug.text = str($Tumbling.is_colliding())#str(is_on_floor())#_is_bottom_raycasts_colliding())
 	$BottomRaycastDebug.visible = true
 	$Stunned.visible = bad_state == bad_states.STUNNED
