@@ -1,9 +1,106 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://Assets/Sheets/Enemy/Idle.png" type="Texture" id=1]
 [ext_resource path="res://Enemies/BasicEnemy.gd" type="Script" id=2]
 [ext_resource path="res://Assets/UI/health_bar.png" type="Texture" id=3]
 [ext_resource path="res://Fonts/joystix monospace.ttf" type="DynamicFontData" id=4]
+
+[sub_resource type="AnimationNodeAnimation" id=9]
+animation = "Attack"
+
+[sub_resource type="AnimationNodeAnimation" id=10]
+animation = "Death"
+
+[sub_resource type="AnimationNodeAnimation" id=11]
+animation = "Idle"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=12]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=13]
+switch_mode = 2
+auto_advance = true
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=14]
+
+[sub_resource type="AnimationNodeStateMachine" id=6]
+states/Attack/node = SubResource( 9 )
+states/Attack/position = Vector2( 314, 175 )
+states/Death/node = SubResource( 10 )
+states/Death/position = Vector2( 160, 84 )
+states/Idle/node = SubResource( 11 )
+states/Idle/position = Vector2( 314, 84 )
+transitions = [ "Idle", "Attack", SubResource( 12 ), "Attack", "Idle", SubResource( 13 ), "Idle", "Death", SubResource( 14 ) ]
+start_node = "Idle"
+
+[sub_resource type="AnimationNodeStateMachinePlayback" id=7]
+
+[sub_resource type="Animation" id=8]
+resource_name = "Attack"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0.01, 0.2, 0.4 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 0.977345, 0.977345, 0.977345, 1 ), Color( 0.729412, 0.4, 0.0784314, 1 ), Color( 0.977345, 0.977345, 0.977345, 1 ) ]
+}
+tracks/1/type = "method"
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0.2 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "_attack"
+} ]
+}
+tracks/2/type = "method"
+tracks/2/path = NodePath("CombatMechanics/AttackCooldown")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0.4 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [ -1 ],
+"method": "start"
+} ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath(".:can_attack")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0.01, 0.4 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ true, false ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath(".:current_state")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0.4 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 0 ]
+}
 
 [sub_resource type="Animation" id=1]
 resource_name = "Death"
@@ -47,7 +144,7 @@ tracks/2/keys = {
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
 }
 tracks/3/type = "value"
-tracks/3/path = NodePath("Label:modulate")
+tracks/3/path = NodePath("HealthBar/HealthBarValue:modulate")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/imported = false
@@ -76,11 +173,11 @@ tracks/0/keys = {
 "values": [ 0, 1, 2, 3 ]
 }
 
-[sub_resource type="RectangleShape2D" id=3]
-extents = Vector2( 10.166, 24 )
-
 [sub_resource type="DynamicFont" id=4]
 font_data = ExtResource( 4 )
+
+[sub_resource type="RectangleShape2D" id=3]
+extents = Vector2( 10.166, 24 )
 
 [sub_resource type="CircleShape2D" id=5]
 radius = 251.291
@@ -90,13 +187,29 @@ collision_layer = 8
 collision_mask = 64
 script = ExtResource( 2 )
 max_health_point = 650
+speed = 50.0
+attack_range = 32.0
+ai_react_time = 15
+can_attack = true
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+tree_root = SubResource( 6 )
+anim_player = NodePath("../AnimationPlayer")
+active = true
+parameters/playback = SubResource( 7 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 autoplay = "Idle"
+anims/Attack = SubResource( 8 )
 anims/Death = SubResource( 1 )
 anims/Idle = SubResource( 2 )
 
 [node name="Tween" type="Tween" parent="."]
+
+[node name="CombatMechanics" type="Node" parent="."]
+
+[node name="AttackCooldown" type="Timer" parent="CombatMechanics"]
+one_shot = true
 
 [node name="Timers" type="Node" parent="."]
 
@@ -104,19 +217,7 @@ anims/Idle = SubResource( 2 )
 wait_time = 3.0
 one_shot = true
 
-[node name="Sprite" type="Sprite" parent="."]
-modulate = Color( 0.977345, 0.977345, 0.977345, 1 )
-texture = ExtResource( 1 )
-hframes = 4
-frame = 2
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
-position = Vector2( 4, 2 )
-shape = SubResource( 3 )
-
 [node name="HealthBar" type="TextureProgress" parent="."]
-modulate = Color( 1, 1, 1, 0.984986 )
 margin_left = -13.0
 margin_top = 28.0
 margin_right = 21.0
@@ -131,13 +232,13 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label" type="Label" parent="."]
+[node name="HealthBarValue" type="Label" parent="HealthBar"]
 visible = false
-modulate = Color( 1, 1, 1, 0.98505 )
-margin_left = -19.3455
-margin_top = 29.0962
-margin_right = 71.6545
-margin_bottom = 49.0962
+modulate = Color( 1, 1, 1, 0 )
+margin_left = -6.3455
+margin_top = 1.0962
+margin_right = 84.6545
+margin_bottom = 21.0962
 rect_scale = Vector2( 0.5, 0.5 )
 custom_fonts/font = SubResource( 4 )
 text = "100/100"
@@ -146,14 +247,16 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="BottomRaycast1" type="RayCast2D" parent="."]
-position = Vector2( 5, 23 )
-enabled = true
-cast_to = Vector2( 0, 5 )
-collision_mask = 4
-__meta__ = {
-"_edit_lock_": true
-}
+[node name="Sprite" type="Sprite" parent="."]
+modulate = Color( 0.977345, 0.977345, 0.977345, 1 )
+texture = ExtResource( 1 )
+hframes = 4
+frame = 1
+
+[node name="NormalCollision" type="CollisionShape2D" parent="."]
+visible = false
+position = Vector2( 4, 2 )
+shape = SubResource( 3 )
 
 [node name="PlayerDetection" type="Area2D" parent="."]
 visible = false
@@ -163,5 +266,6 @@ collision_mask = 2
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerDetection"]
 position = Vector2( 14.2544, 14.2544 )
 shape = SubResource( 5 )
+[connection signal="timeout" from="CombatMechanics/AttackCooldown" to="." method="_on_AttackCooldown_timeout"]
 [connection signal="timeout" from="Timers/HealthBarDelay" to="." method="_on_HealthBarDelay_timeout"]
 [connection signal="body_entered" from="PlayerDetection" to="." method="_on_PlayerDetection_body_entered"]

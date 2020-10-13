@@ -146,6 +146,9 @@ start_position_node = NodePath("StartPosition")
 
 [node name="StartPosition" type="Position2D" parent="."]
 position = Vector2( 92.5678, 75.9373 )
+__meta__ = {
+"_edit_lock_": true
+}
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="."]
 
@@ -231,5 +234,4 @@ z_index = -1
 [node name="BasicEnemy" parent="." groups=[
 "Enemy",
 ] instance=ExtResource( 5 )]
-position = Vector2( 54, 27 )
-speed = 200.0
+position = Vector2( 223, 161 )
