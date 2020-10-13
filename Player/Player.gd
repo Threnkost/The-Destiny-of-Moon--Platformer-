@@ -200,6 +200,9 @@ func _attack_if_enemy(body:Node, damage := 0, index := 0):
 		set_health(health_point + value_to_heal)
 		print("Attacked : ", body.name, " value : ", total_damage)
 
+func is_damagable() -> bool:
+	return current_state != TUMBLING
+
 func _on_RightHitbox_body_entered(body):
 	_attack_if_enemy(body, stats.get_stat_amount("AttackDamage"), 0)
 

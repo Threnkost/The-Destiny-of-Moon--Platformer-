@@ -22,9 +22,12 @@ var ai_next_react_time := 0
 export (ai_states) var current_state = ai_states.IDLE
 
 #COMBAT MECHANICS
-#onready var attack_cooldown_timer = $CombatMechanics/AttackCooldown
-
 export (bool) var can_attack = false
+
+func stun(duration := 0.5) -> void:
+	bad_state = bad_states.STUNNED
+	$CombatMechanics/StunTimer.wait_time = duration
+	$CombatMechanics/StunTimer.start()
 
 func _ready() -> void:
 	anim_tree = $AnimationTree.get("parameters/playback")
@@ -47,6 +50,8 @@ func damage(damager, damage, push_scale:=1) -> void:
 	$HealthBar.modulate = Color(1,1,1,1)
 	$Timers/HealthBarDelay.start()
 
+	stun(1)
+
 	health_point -= damage
 	if health_point <= 0:
 		die()
@@ -59,10 +64,33 @@ func _physics_process(delta) -> void:
 	velocity.y += GRAVITY
 	if velocity.y >= MAX_GRAVITY:
 		velocity.y = MAX_GRAVITY
+	
 	if is_on_floor():
 		velocity.y = 0
+	
+	_handle_sliding()
+	_handle_states(delta)
+	
+	velocity.y = move_and_slide_with_snap(get_total_velocity(), 8.0*Vector2.DOWN, 
+		Vector2.UP, true, 4, deg2rad(45.1)).y
 
-	if player_in:
+func _handle_states(delta) -> void:
+	if bad_state == bad_states.STUNNED:
+		return
+	match current_state:
+		ai_states.IDLE:
+			anim_tree.travel("Idle")
+			velocity = Vector2.ZERO
+		ai_states.WALKING:
+			pass
+		ai_states.ATTACKING:
+			anim_tree.travel("Attack")
+			velocity = Vector2.ZERO
+		ai_states.FOLLOWING_PLAYER:
+			_follow_player()
+
+func _follow_player() -> void:
+	if true: #player_in:
 		if position.x < Global.player.position.x - attack_range: #Move to right
 			set_next_direction(1)
 		elif position.x > Global.player.position.x + attack_range: #Move to left
@@ -76,30 +104,13 @@ func _physics_process(delta) -> void:
 			direction = ai_next_direction
 			velocity.x = speed * direction
 
-	_handle_sliding()
-	_handle_states(delta)
-
-	velocity.y = move_and_slide_with_snap(get_total_velocity(), 8.0*Vector2.DOWN, 
-		Vector2.UP, true, 4, deg2rad(45.1)).y
-
-func _handle_states(delta) -> void:
-	match current_state:
-		ai_states.IDLE:
-			anim_tree.travel("Idle")
-		ai_states.WALKING:
-			pass
-		ai_states.ATTACKING:
-			anim_tree.travel("Attack")
-		ai_states.FOLLOW_PLAYER:
-			pass
-
 func _attack() -> void:
-	Global.player.damage(self, 5)
-	print(Global.player.health_point)
+	if Global.player.is_damagable():
+		Global.player.damage(self, 5)
 
 func _on_PlayerDetection_body_entered(body):
 	if body.is_in_group("Player"):
-		player_in = true
+		current_state = ai_states.FOLLOWING_PLAYER
 
 func _on_HealthBarDelay_timeout():
 	$Tween.interpolate_property($HealthBar, "modulate", Color(1,1,1,1), Color(1,1,1,0), 0.5, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
@@ -107,4 +118,6 @@ func _on_HealthBarDelay_timeout():
 
 func _on_AttackCooldown_timeout():
 	can_attack = true
-	
+
+func _on_StunTimer_timeout():
+	bad_state = bad_states.NORMAL
