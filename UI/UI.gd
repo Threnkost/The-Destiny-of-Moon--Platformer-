@@ -8,8 +8,8 @@ func _ready():
 	mana_bar   = $Bars/ManaBar
 
 func _on_Player_health_changed(hp, max_hp):
-	$Bars/HealthBar.max_value = max_hp
-	$Bars/HealthBar.value     = hp
+	$Bars/HealthBar.true_max_value = max_hp
+	$Bars/HealthBar.true_value     = hp
 	$Bars/HealthBar/Label.text = str("%s/%s" % [hp, max_hp])
 
 func _on_Player_mana_changed(mp, max_mp):

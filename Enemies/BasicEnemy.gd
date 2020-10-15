@@ -12,7 +12,7 @@ enum ai_states {
 	WALKING
 }
 
-onready var anim_tree
+onready var anim_tree:AnimationNodeStateMachinePlayback
 
 #AI
 var player_in          := false
@@ -37,7 +37,6 @@ func _ready() -> void:
 
 func die() -> void:
 	.die()
-	$AnimationPlayer.play("Death")
 
 func set_next_direction(target_direction) -> void:
 	if ai_next_direction != target_direction:
@@ -50,16 +49,15 @@ func damage(damager, damage, push_scale:=1) -> void:
 	$HealthBar.modulate = Color(1,1,1,1)
 	$Timers/HealthBarDelay.start()
 
-	stun(1)
+	stun(0.5)
 
 	health_point -= damage
 	if health_point <= 0:
 		die()
 
 func _physics_process(delta) -> void:
-	$HealthBar.max_value = max_health_point
-	$HealthBar.value     = health_point
-	$HealthBar/HealthBarValue.text = "%s/%s" % [health_point, max_health_point]
+	$HealthBar.true_max_value = max_health_point
+	$HealthBar.true_value     = health_point
 
 	velocity.y += GRAVITY
 	if velocity.y >= MAX_GRAVITY:
@@ -75,17 +73,23 @@ func _physics_process(delta) -> void:
 		Vector2.UP, true, 4, deg2rad(45.1)).y
 
 func _handle_states(delta) -> void:
+	if life_state == life_states.DEAD:
+		anim_tree.travel("Death")
+		return
 	if bad_state == bad_states.STUNNED:
+		velocity.x = 0
+		anim_tree.travel("Stunned")
+		current_state = ai_states.FOLLOWING_PLAYER
 		return
 	match current_state:
 		ai_states.IDLE:
 			anim_tree.travel("Idle")
-			velocity = Vector2.ZERO
+			velocity.x = 0
 		ai_states.WALKING:
 			pass
 		ai_states.ATTACKING:
 			anim_tree.travel("Attack")
-			velocity = Vector2.ZERO
+			velocity.x = 0
 		ai_states.FOLLOWING_PLAYER:
 			_follow_player()
 

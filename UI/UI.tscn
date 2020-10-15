@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://UI/UI.gd" type="Script" id=1]
 [ext_resource path="res://Assets/UI/health_bar.png" type="Texture" id=2]
 [ext_resource path="res://Themes/UI.tres" type="Theme" id=3]
+[ext_resource path="res://UI/AnimatedBar.tscn" type="PackedScene" id=4]
 
 [node name="UI" type="Control"]
 anchor_right = 1.0
@@ -24,29 +25,25 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="HealthBar" type="TextureProgress" parent="Bars"]
+[node name="HealthBar" parent="Bars" instance=ExtResource( 4 )]
 margin_right = 256.0
 margin_bottom = 32.0
-rect_min_size = Vector2( 64, 32 )
-value = 50.0
-texture_under = ExtResource( 2 )
-texture_progress = ExtResource( 2 )
-tint_under = Color( 0.431373, 0.0588235, 0.207843, 1 )
-tint_progress = Color( 1, 0, 0.352941, 1 )
-nine_patch_stretch = true
+rect_min_size = Vector2( 256, 32 )
 
 [node name="Label" type="Label" parent="Bars/HealthBar"]
-margin_left = 50.3379
-margin_top = -3.89874
-margin_right = 128.338
-margin_bottom = 16.1013
+margin_left = 36.0
+margin_top = -4.0
+margin_right = 127.0
+margin_bottom = 16.0
 rect_scale = Vector2( 2, 2 )
 text = "50/100"
+align = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="ManaBar" type="TextureProgress" parent="Bars"]
+visible = false
 margin_top = 36.0
 margin_right = 256.0
 margin_bottom = 68.0
@@ -59,10 +56,10 @@ tint_progress = Color( 0.00784314, 0.682353, 0.976471, 1 )
 nine_patch_stretch = true
 
 [node name="Label" type="Label" parent="Bars/ManaBar"]
-margin_left = 48.5477
-margin_top = -3.91122
-margin_right = 126.548
-margin_bottom = 16.0888
+margin_left = 48.0
+margin_top = -4.0
+margin_right = 126.0
+margin_bottom = 16.0
 rect_scale = Vector2( 2, 2 )
 text = "50/100"
 __meta__ = {

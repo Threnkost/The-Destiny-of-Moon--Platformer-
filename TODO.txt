@@ -1,4 +1,5 @@
-1) AnimatedBar ???
+1) Animated Health Bar.
 2) Replace sprites with your own.
 3) Loot chests? It would be great.
 4) Please, improve enemy AI. IT SUCKS.
+5) Improve camera.
