@@ -1,0 +1,66 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://Assets/Sheets/EVil Wizard 2/Sprites/Idle.png" type="Texture" id=1]
+[ext_resource path="res://NPCs/Merchant.gd" type="Script" id=2]
+[ext_resource path="res://Assets/Sheets/KeyboardButtons.png" type="Texture" id=3]
+
+[sub_resource type="Animation" id=1]
+resource_name = "Idle"
+length = 0.8
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 0, 1, 2, 3, 4, 5, 6, 7 ]
+}
+
+[sub_resource type="AtlasTexture" id=3]
+atlas = ExtResource( 3 )
+region = Rect2( 0, 0, 16, 16 )
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 12, 25 )
+
+[sub_resource type="CapsuleShape2D" id=4]
+radius = 8.0
+
+[node name="Merchant" type="KinematicBody2D"]
+collision_layer = 256
+collision_mask = 4
+script = ExtResource( 2 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+autoplay = "Idle"
+anims/Idle = SubResource( 1 )
+
+[node name="Sprite" type="Sprite" parent="."]
+texture = ExtResource( 1 )
+hframes = 8
+frame = 1
+
+[node name="KeyF" type="Sprite" parent="."]
+position = Vector2( -3, 51 )
+texture = SubResource( 3 )
+
+[node name="BodyCollisionShape" type="CollisionShape2D" parent="."]
+visible = false
+position = Vector2( -5, 17 )
+shape = SubResource( 2 )
+
+[node name="PlayerDetection" type="Area2D" parent="."]
+visible = false
+collision_layer = 64
+collision_mask = 2
+
+[node name="PlayerDetectionShape" type="CollisionShape2D" parent="PlayerDetection"]
+position = Vector2( -1, 22 )
+shape = SubResource( 4 )
+[connection signal="body_entered" from="PlayerDetection" to="." method="_on_PlayerDetection_body_entered"]
+[connection signal="body_exited" from="PlayerDetection" to="." method="_on_PlayerDetection_body_exited"]

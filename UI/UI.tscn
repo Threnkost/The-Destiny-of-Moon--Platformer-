@@ -65,3 +65,10 @@ text = "50/100"
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="FPS" type="Label" parent="."]
+margin_left = 344.0
+margin_right = 384.0
+margin_bottom = 20.0
+text = "100"
+align = 2

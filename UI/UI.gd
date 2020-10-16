@@ -7,6 +7,12 @@ func _ready():
 	health_bar = $Bars/HealthBar
 	mana_bar   = $Bars/ManaBar
 
+func _physics_process(delta):
+	if Settings.settings["show_fps"]:
+		$FPS.text = str(Engine.get_frames_per_second())
+	else:
+		$FPS.text = ""
+
 func _on_Player_health_changed(hp, max_hp):
 	$Bars/HealthBar.true_max_value = max_hp
 	$Bars/HealthBar.true_value     = hp

@@ -1,5 +1,12 @@
-1) Animated Health Bar.
-2) Replace sprites with your own.
-3) Loot chests? It would be great.
-4) Please, improve enemy AI. IT SUCKS.
-5) Improve camera.
+- Replace sprites with your own.
+- Loot chests? It would be great. However, I must finish the inventory first.
+- Please, improve enemy AI. IT SUCKS.
+- Improve camera.
+- Currency system. Player will need some money to buy something.
+- Debug panel.
+- Seyyar Tüccar, iyi bir fikir.
+- Diyalog sistemi.
+
+[COMPLETED]
+- Animated Health Bar.
+- Settings menu.

@@ -1,4 +1,5 @@
 [Current Bugs]
 1) Kayarken oyuncu iki blok arasında sıkışıp kalabiliyor.
+2) "Ayarlar" Menüsünde "Target FPS" kısmına harfler de yazılabiliniyor.
 
 [Fixed Bugs]

@@ -48,6 +48,7 @@ states/Stunned/position = Vector2( 480, 84 )
 transitions = [ "Idle", "Attack", SubResource( 5 ), "Attack", "Idle", SubResource( 6 ), "Idle", "Death", SubResource( 7 ), "Attack", "Death", SubResource( 8 ), "Idle", "Stunned", SubResource( 9 ), "Stunned", "Idle", SubResource( 10 ), "Attack", "Stunned", SubResource( 11 ), "Stunned", "Death", SubResource( 12 ) ]
 start_node = "Idle"
 end_node = "Death"
+graph_offset = Vector2( 0, -81.0759 )
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=14]
 
@@ -260,7 +261,7 @@ duration = 0.5
 [node name="Sprite" type="Sprite" parent="."]
 texture = ExtResource( 1 )
 hframes = 4
-frame = 1
+frame = 2
 __meta__ = {
 "_edit_lock_": true
 }

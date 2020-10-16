@@ -4,10 +4,10 @@
 [ext_resource path="res://Assets/Sheets/Temporary tileset.png" type="Texture" id=2]
 [ext_resource path="res://Main/Camera.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Objects/LootChest.tscn" type="PackedScene" id=4]
-[ext_resource path="res://Enemies/BasicEnemy.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Assets/Backgrounds/Test/sky.png" type="Texture" id=6]
 [ext_resource path="res://Assets/Backgrounds/Test/glacial_mountains.png" type="Texture" id=7]
 [ext_resource path="res://Assets/Backgrounds/Test/clouds_bg.png" type="Texture" id=8]
+[ext_resource path="res://NPCs/Merchant.tscn" type="PackedScene" id=9]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 1673, 10 )
@@ -207,7 +207,7 @@ __meta__ = {
 }
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Deadzone"]
-position = Vector2( 276, 351 )
+position = Vector2( 280, 347 )
 shape = SubResource( 1 )
 
 [node name="Background" type="Node2D" parent="."]
@@ -241,17 +241,11 @@ __meta__ = {
 "_edit_lock_": true
 }
 
-[node name="LootChest" parent="." instance=ExtResource( 4 )]
+[node name="LootChest" parent="Background" instance=ExtResource( 4 )]
 position = Vector2( 93, 206 )
 z_index = -1
 
-[node name="BasicEnemy" parent="." groups=[
-"Enemy",
-] instance=ExtResource( 5 )]
-position = Vector2( 223, 161 )
-
-[node name="BasicEnemy2" parent="." groups=[
-"Enemy",
-] instance=ExtResource( 5 )]
-position = Vector2( 714, 152 )
+[node name="Merchant" parent="." instance=ExtResource( 9 )]
+position = Vector2( 382, 110 )
+z_index = -1
 [connection signal="body_entered" from="Deadzone" to="." method="_on_Deadzone_body_entered"]

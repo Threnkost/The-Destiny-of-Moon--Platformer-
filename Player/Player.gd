@@ -86,6 +86,11 @@ func _check_direction():
 			$Sprite.flip_h = true
 
 func _handle_inputs():
+	if Input.is_action_just_pressed("ui_cancel"):
+		var node = Global.main_scene.get_node("UI/SettingsMenu")
+		var visibility = node.visible
+		node.open() if not visibility else node.hide()
+
 	if Input.is_action_just_pressed("OpenInventory"):
 		Global.inventory.visible = !Global.inventory.visible
 	
