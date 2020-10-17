@@ -7,6 +7,8 @@ func _ready():
 	health_bar = $Bars/HealthBar
 	mana_bar   = $Bars/ManaBar
 
+	$Money/Label.text = str(Global.player.wallet.currencies["gold"].value)
+
 func _physics_process(delta):
 	if Settings.settings["show_fps"]:
 		$FPS.text = str(Engine.get_frames_per_second())

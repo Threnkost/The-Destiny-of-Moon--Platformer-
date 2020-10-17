@@ -203,10 +203,10 @@ tracks/0/keys = {
 "values": [ Color( 1, 1, 1, 1 ), Color( 0.933333, 0.0980392, 0.333333, 1 ), Color( 0.977345, 0.977345, 0.977345, 1 ) ]
 }
 
-[sub_resource type="RectangleShape2D" id=20]
+[sub_resource type="RectangleShape2D" id=19]
 extents = Vector2( 10.166, 24 )
 
-[sub_resource type="CircleShape2D" id=21]
+[sub_resource type="CircleShape2D" id=20]
 radius = 104.997
 
 [node name="BasicEnemy" type="KinematicBody2D"]
@@ -256,12 +256,11 @@ margin_left = -13.0
 margin_top = 28.0
 margin_right = 21.0
 margin_bottom = 31.0
-duration = 0.5
 
 [node name="Sprite" type="Sprite" parent="."]
 texture = ExtResource( 1 )
 hframes = 4
-frame = 2
+frame = 1
 __meta__ = {
 "_edit_lock_": true
 }
@@ -269,7 +268,7 @@ __meta__ = {
 [node name="NormalCollision" type="CollisionShape2D" parent="."]
 visible = false
 position = Vector2( 4, 2 )
-shape = SubResource( 20 )
+shape = SubResource( 19 )
 __meta__ = {
 "_edit_lock_": true
 }
@@ -281,7 +280,7 @@ collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerDetection"]
 position = Vector2( 1, 1 )
-shape = SubResource( 21 )
+shape = SubResource( 20 )
 [connection signal="timeout" from="CombatMechanics/AttackCooldown" to="." method="_on_AttackCooldown_timeout"]
 [connection signal="timeout" from="CombatMechanics/StunTimer" to="." method="_on_StunTimer_timeout"]
 [connection signal="timeout" from="Timers/HealthBarDelay" to="." method="_on_HealthBarDelay_timeout"]

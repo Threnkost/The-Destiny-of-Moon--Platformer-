@@ -31,6 +31,7 @@ func stun(duration := 0.5) -> void:
 
 func _ready() -> void:
 	anim_tree = $AnimationTree.get("parameters/playback")
+	add_to_group("Enemy")
 
 	direction = -1
 	$HealthBar.modulate = Color(1,1,1,0)

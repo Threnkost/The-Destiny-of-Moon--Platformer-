@@ -21,15 +21,15 @@ tracks/0/keys = {
 "values": [ 0, 1, 2, 3, 4, 5, 6, 7 ]
 }
 
-[sub_resource type="AtlasTexture" id=3]
+[sub_resource type="AtlasTexture" id=2]
 atlas = ExtResource( 3 )
 region = Rect2( 0, 0, 16, 16 )
 
-[sub_resource type="RectangleShape2D" id=2]
+[sub_resource type="RectangleShape2D" id=3]
 extents = Vector2( 12, 25 )
 
 [sub_resource type="CapsuleShape2D" id=4]
-radius = 8.0
+radius = 14.0
 
 [node name="Merchant" type="KinematicBody2D"]
 collision_layer = 256
@@ -47,12 +47,12 @@ frame = 1
 
 [node name="KeyF" type="Sprite" parent="."]
 position = Vector2( -3, 51 )
-texture = SubResource( 3 )
+texture = SubResource( 2 )
 
 [node name="BodyCollisionShape" type="CollisionShape2D" parent="."]
 visible = false
 position = Vector2( -5, 17 )
-shape = SubResource( 2 )
+shape = SubResource( 3 )
 
 [node name="PlayerDetection" type="Area2D" parent="."]
 visible = false
@@ -60,7 +60,7 @@ collision_layer = 64
 collision_mask = 2
 
 [node name="PlayerDetectionShape" type="CollisionShape2D" parent="PlayerDetection"]
-position = Vector2( -1, 22 )
+position = Vector2( 0, 17 )
 shape = SubResource( 4 )
 [connection signal="body_entered" from="PlayerDetection" to="." method="_on_PlayerDetection_body_entered"]
 [connection signal="body_exited" from="PlayerDetection" to="." method="_on_PlayerDetection_body_exited"]

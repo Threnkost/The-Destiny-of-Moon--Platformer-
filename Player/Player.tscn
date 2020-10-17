@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=2]
+[gd_scene load_steps=38 format=2]
 
 [ext_resource path="res://Player/Player.gd" type="Script" id=1]
 [ext_resource path="res://Assets/Sheets/Player/adventurer-Sheet.png" type="Texture" id=2]
@@ -6,6 +6,8 @@
 [ext_resource path="res://Classes/Stat.gd" type="Script" id=4]
 [ext_resource path="res://Fonts/joystix monospace.ttf" type="DynamicFontData" id=5]
 [ext_resource path="res://Themes/UI.tres" type="Theme" id=6]
+[ext_resource path="res://Classes/Wallet.gd" type="Script" id=7]
+[ext_resource path="res://Classes/Currency.gd" type="Script" id=8]
 
 [sub_resource type="Animation" id=1]
 length = 0.6
@@ -483,6 +485,14 @@ one_shot = true
 wait_time = 0.25
 one_shot = true
 
+[node name="Wallet" type="Node" parent="."]
+script = ExtResource( 7 )
+
+[node name="Gold" type="Node" parent="Wallet"]
+script = ExtResource( 8 )
+value = 15
+max_value = 10000
+
 [node name="BottomRaycastDebug" type="Label" parent="."]
 visible = false
 margin_left = -42.0
@@ -513,6 +523,7 @@ material = SubResource( 26 )
 texture = ExtResource( 2 )
 vframes = 11
 hframes = 7
+frame = 1
 __meta__ = {
 "_edit_lock_": true
 }

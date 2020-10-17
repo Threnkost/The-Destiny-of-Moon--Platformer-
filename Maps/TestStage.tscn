@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://Maps/TestStage.gd" type="Script" id=1]
 [ext_resource path="res://Assets/Sheets/Temporary tileset.png" type="Texture" id=2]
@@ -9,6 +9,7 @@
 [ext_resource path="res://Assets/Backgrounds/Test/glacial_mountains.png" type="Texture" id=7]
 [ext_resource path="res://Assets/Backgrounds/Test/clouds_bg.png" type="Texture" id=8]
 [ext_resource path="res://NPCs/Merchant.tscn" type="PackedScene" id=9]
+[ext_resource path="res://Enemies/BasicEnemy.tscn" type="PackedScene" id=10]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 1673, 10 )
@@ -218,13 +219,6 @@ speed = 0.5
 zoom_scale = 0.25
 zoom_type = 1
 
-[node name="CameraZoom2" parent="." instance=ExtResource( 5 )]
-position = Vector2( 744, 184 )
-scale = Vector2( 28.8263, 4.60967 )
-speed = 0.5
-zoom_scale = 0.25
-zoom_type = 1
-
 [node name="Background" type="Node2D" parent="."]
 z_index = -1
 __meta__ = {
@@ -263,4 +257,7 @@ z_index = -1
 [node name="Merchant" parent="." instance=ExtResource( 9 )]
 position = Vector2( 382, 110 )
 z_index = -1
+
+[node name="BasicEnemy" parent="." instance=ExtResource( 10 )]
+position = Vector2( 536, 190 )
 [connection signal="body_entered" from="Deadzone" to="." method="_on_Deadzone_body_entered"]

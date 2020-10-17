@@ -15,9 +15,11 @@ enum {
 	TUMBLING,
 }
 
-#MECHANICS
+#NODES & RESOURCES
 onready var state_machine_player
+onready var wallet = $Wallet
 
+#MECHANICS
 var current_state = MOVING setget set_state
 
 var can_jump := true
