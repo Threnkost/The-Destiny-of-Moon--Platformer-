@@ -1,9 +1,10 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://Maps/TestStage.gd" type="Script" id=1]
 [ext_resource path="res://Assets/Sheets/Temporary tileset.png" type="Texture" id=2]
 [ext_resource path="res://Main/Camera.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Objects/LootChest.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Camera/CameraZoom.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Assets/Backgrounds/Test/sky.png" type="Texture" id=6]
 [ext_resource path="res://Assets/Backgrounds/Test/glacial_mountains.png" type="Texture" id=7]
 [ext_resource path="res://Assets/Backgrounds/Test/clouds_bg.png" type="Texture" id=8]
@@ -209,6 +210,20 @@ __meta__ = {
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Deadzone"]
 position = Vector2( 280, 347 )
 shape = SubResource( 1 )
+
+[node name="CameraZoom" parent="." instance=ExtResource( 5 )]
+position = Vector2( 384, 120 )
+scale = Vector2( 5.90632, 4.60967 )
+speed = 0.5
+zoom_scale = 0.25
+zoom_type = 1
+
+[node name="CameraZoom2" parent="." instance=ExtResource( 5 )]
+position = Vector2( 744, 184 )
+scale = Vector2( 28.8263, 4.60967 )
+speed = 0.5
+zoom_scale = 0.25
+zoom_type = 1
 
 [node name="Background" type="Node2D" parent="."]
 z_index = -1

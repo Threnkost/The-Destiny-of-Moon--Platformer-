@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=2]
+[gd_scene load_steps=36 format=2]
 
 [ext_resource path="res://Player/Player.gd" type="Script" id=1]
 [ext_resource path="res://Assets/Sheets/Player/adventurer-Sheet.png" type="Texture" id=2]
@@ -429,6 +429,9 @@ extents = Vector2( 6, 15.0867 )
 [sub_resource type="RectangleShape2D" id=28]
 extents = Vector2( 6.8922, 7 )
 
+[sub_resource type="CircleShape2D" id=29]
+radius = 4.12311
+
 [node name="Player" type="KinematicBody2D"]
 collision_layer = 2
 collision_mask = 5
@@ -510,7 +513,6 @@ material = SubResource( 26 )
 texture = ExtResource( 2 )
 vframes = 11
 hframes = 7
-frame = 3
 __meta__ = {
 "_edit_lock_": true
 }
@@ -553,6 +555,12 @@ enabled = true
 cast_to = Vector2( 0, -5 )
 collision_mask = 4
 
+[node name="Tumbling" type="RayCast2D" parent="."]
+position = Vector2( 0, 5 )
+enabled = true
+cast_to = Vector2( 25, 0 )
+collision_mask = 4
+
 [node name="FirstAttackHitbox" type="Area2D" parent="."]
 visible = false
 collision_layer = 64
@@ -581,11 +589,14 @@ collision_mask = 8
 polygon = PoolVector2Array( -3.41606, -5.25898, 13.8469, -1.09205, 24.5619, 4.26543, 24.165, 8.63078, 19.7997, 12.4009, 9.28315, 15.5757, -12.9405, 14.9804, -22.8617, 11.4087, -13.9326, 7.04338, -3.81291, 11.6072, 5.51308, 11.8056, 16.8233, 6.24968, 13.4501, 1.48748 )
 disabled = true
 
-[node name="Tumbling" type="RayCast2D" parent="."]
-position = Vector2( 0, 5 )
-enabled = true
-cast_to = Vector2( 25, 0 )
-collision_mask = 4
+[node name="CameraDetection" type="Area2D" parent="."]
+visible = false
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CameraDetection"]
+position = Vector2( 0, 2 )
+shape = SubResource( 29 )
 [connection signal="timeout" from="Timers/AttackCombinationTimer" to="." method="_on_AttackCombinationTimer_timeout"]
 [connection signal="timeout" from="Timers/CombinationCooldown" to="." method="_on_CombinationCooldown_timeout"]
 [connection signal="timeout" from="Timers/TumblingCooldown" to="." method="_on_TumblingCooldown_timeout"]

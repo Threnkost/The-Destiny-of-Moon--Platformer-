@@ -1,5 +1,6 @@
 [Current Bugs]
 1) Kayarken oyuncu iki blok arasında sıkışıp kalabiliyor.
-2) "Ayarlar" Menüsünde "Target FPS" kısmına harfler de yazılabiliniyor.
+2) "Ayarlar" Menüsünde "Target FPS" kısmına harfler de yazılabiliniyor. (Sadece sayılar olmalı)
+3) "CameraZoom" da oyuncu takla atınca ekran titriyor.
 
 [Fixed Bugs]

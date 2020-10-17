@@ -15,5 +15,7 @@ modulate = Color( 0.615686, 0, 1, 1 )
 shape = SubResource( 1 )
 
 [node name="Tween" type="Tween" parent="."]
-[connection signal="body_entered" from="." to="." method="_on_CameraZoomOut_body_entered"]
-[connection signal="body_exited" from="." to="." method="_on_CameraZoomOut_body_exited"]
+[connection signal="area_entered" from="." to="." method="_on_CameraZoom_area_entered"]
+[connection signal="area_exited" from="." to="." method="_on_CameraZoom_area_exited"]
+[connection signal="body_entered" from="." to="." method="_on_CameraZoom_body_entered"]
+[connection signal="body_exited" from="." to="." method="_on_CameraZoom_body_exited"]
