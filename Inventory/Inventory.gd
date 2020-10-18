@@ -57,3 +57,7 @@ func update_description(item_name:="", item_description:=""):
 
 %s
 """ % [item_name, item_description]
+
+func _on_CloseButton_pressed():
+	visible = false
+	$Background/ItemDescription.text = ""

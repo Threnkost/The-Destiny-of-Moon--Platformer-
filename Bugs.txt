@@ -3,6 +3,7 @@
 - "Ayarlar" Menüsünde "Target FPS" kısmına harfler de yazılabiliniyor. (Sadece sayılar olmalı)
 - "CameraZoom" da zoom out yaparken arkaplan görüntüsü bozuluyor.
 - "BasicEnemy", Attack Range'i bozuk.
+- Envanterde bir eşyayı sürükleyip bırakırken bazen eşya sayısı gözükmüyor.
 
 [Fixed Bugs]
 - "CameraZoom" da oyuncu takla atınca ekran titriyor.
