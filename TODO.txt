@@ -6,6 +6,7 @@
 - Debug panel.
 - Diyalog sistemi.
 - Seyyar Tüccar'ın UI geliştirilmeli.
+- LootChest geliştirilmeli.
 
 [COMPLETED]
 - Animated Health Bar.

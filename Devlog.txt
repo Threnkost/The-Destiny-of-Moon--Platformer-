@@ -1,4 +1,4 @@
-1) Added camera zoom out/in.
-2) Improved inventory system.
-3) Added Merchant.
-4) Adding loot chest.
+1) Added camera zoom out/in. [17.10.2020]
+2) Improved inventory system. [17.10.2020] - [18.10.202]
+3) Added Merchant. [18.10.2020]
+4) Added loot chest. [18.10.2020]

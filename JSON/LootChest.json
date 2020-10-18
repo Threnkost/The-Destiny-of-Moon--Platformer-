@@ -1,0 +1,16 @@
+ {
+	"1_TestStage":{
+		"min_gold_value":100,
+		"max_gold_value":500,		 
+		"items":{
+			"HealthPotion":{
+				"amount":15,
+				"percentage":1.0
+			},
+			"Totem":{
+				"amount":1,
+				"percentage":1.0
+			}
+		}
+	}
+}

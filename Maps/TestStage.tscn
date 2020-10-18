@@ -253,7 +253,7 @@ __meta__ = {
 [node name="LootChest" parent="Background" instance=ExtResource( 4 )]
 position = Vector2( 93, 206 )
 z_index = -1
-gold_amount = 500
+id = "1_TestStage"
 
 [node name="Merchant" parent="." instance=ExtResource( 9 )]
 position = Vector2( 382, 110 )

@@ -16,7 +16,16 @@ __meta__ = {
 }
 item_container_path = NodePath("Background/ItemSlots")
 
+[node name="DraggingItem" type="TextureRect" parent="."]
+margin_right = 16.0
+margin_bottom = 16.0
+rect_min_size = Vector2( 16, 16 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="Background" type="NinePatchRect" parent="."]
+show_behind_parent = true
 margin_left = 8.0
 margin_top = 8.0
 margin_right = 376.0
@@ -28,16 +37,6 @@ patch_margin_right = 8
 patch_margin_bottom = 8
 __meta__ = {
 "_edit_lock_": true,
-"_edit_use_anchors_": false
-}
-
-[node name="DraggingItem" type="TextureRect" parent="Background"]
-margin_left = -8.0
-margin_top = -8.0
-margin_right = 8.0
-margin_bottom = 8.0
-rect_min_size = Vector2( 16, 16 )
-__meta__ = {
 "_edit_use_anchors_": false
 }
 

@@ -18,17 +18,17 @@ func _ready():
 	var item1 = load("res://Items/Resources/HealthPotion.tres")
 	var item2 = load("res://Items/Resources/ManaPotion.tres")
 
-	add_item(item1)
+	add_item(item1, 95)
 	add_item(item2)
 
 func _process(delta):
 	if dragging_item["item"] and dragging_item["amount"] >= 1:
-		$Background/DraggingItem.visible = true
-		$Background/DraggingItem.texture = dragging_item["item"].texture
-		$Background/DraggingItem.rect_global_position = get_global_mouse_position()
+		$DraggingItem.visible = true
+		$DraggingItem.texture = dragging_item["item"].texture
+		$DraggingItem.rect_global_position = get_global_mouse_position()
 	else:
-		$Background/DraggingItem.visible = false
-		$Background/DraggingItem.texture = null
+		$DraggingItem.visible = false
+		$DraggingItem.texture = null
 
 func add_item(it, n := 1) -> bool:
 	var empty_slots := []

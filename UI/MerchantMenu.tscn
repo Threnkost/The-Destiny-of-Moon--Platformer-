@@ -56,6 +56,7 @@ margin_right = 369.0
 margin_bottom = 17.0
 rect_min_size = Vector2( 17, 17 )
 focus_mode = 0
+shortcut_in_tooltip = false
 enabled_focus_mode = 0
 shortcut = SubResource( 2 )
 texture_normal = ExtResource( 4 )
