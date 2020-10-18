@@ -4,8 +4,8 @@
 - Improve camera.
 - Currency system. Player will need some money to buy something.
 - Debug panel.
-- Seyyar Tüccar, iyi bir fikir.
 - Diyalog sistemi.
+- Seyyar Tüccar'ın UI geliştirilmeli.
 
 [COMPLETED]
 - Animated Health Bar.

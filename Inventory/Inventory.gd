@@ -12,29 +12,29 @@ var dragging_item := {
 func _ready():
 	item_container = get_node(item_container_path)
 	
-	var item1:ConsumableItemInstance = ConsumableItemInstance.new("Health Potion I")
-	var item2:ConsumableItemInstance = ConsumableItemInstance.new("Mana Potion I")
-#
-#	dragging_item["item"]   = item1
-#	dragging_item["amount"] = 3
+	#var item1:ConsumableItemInstance = ConsumableItemInstance.new("Health Potion I")
+	#var item2:ConsumableItemInstance = ConsumableItemInstance.new("Mana Potion I")
+
+	var item1 = load("res://Items/Resources/HealthPotion.tres")
+	var item2 = load("res://Items/Resources/ManaPotion.tres")
 
 	add_item(item1)
 	add_item(item2)
 
 func _process(delta):
 	if dragging_item["item"] and dragging_item["amount"] >= 1:
-		$Panel/DraggingItem.visible = true
-		$Panel/DraggingItem.texture = dragging_item["item"].item_texture
-		$Panel/DraggingItem.rect_global_position = get_global_mouse_position()
+		$Background/DraggingItem.visible = true
+		$Background/DraggingItem.texture = dragging_item["item"].texture
+		$Background/DraggingItem.rect_global_position = get_global_mouse_position()
 	else:
-		$Panel/DraggingItem.visible = false
-		$Panel/DraggingItem.texture = null
+		$Background/DraggingItem.visible = false
+		$Background/DraggingItem.texture = null
 
-func add_item(it : ItemInstance, n := 1) -> bool:
+func add_item(it, n := 1) -> bool:
 	var empty_slots := []
 	for slot in item_container.get_children():
 		if slot.is_valid() and slot.is_same(it):
-			it.queue_free() #not sure
+			#it.queue_free() #not sure
 			slot.amount += n
 			return true
 		elif not slot.is_valid():
@@ -45,7 +45,7 @@ func add_item(it : ItemInstance, n := 1) -> bool:
 		return true
 	return false
 
-func remove_item(it : ItemInstance, n := 1 ) -> bool:
+func remove_item(it, n := 1 ) -> bool:
 	for slot in item_container.get_children():
 		if slot.is_valid() and slot.is_same(it):
 			slot.amount -= n
@@ -53,7 +53,7 @@ func remove_item(it : ItemInstance, n := 1 ) -> bool:
 	return false
 
 func update_description(item_name:="", item_description:=""):
-	$Panel/ItemDescription.text = """%s
+	$Background/ItemDescription.text = """%s
 
 %s
 """ % [item_name, item_description]

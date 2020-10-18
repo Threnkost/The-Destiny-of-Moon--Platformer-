@@ -1,0 +1,19 @@
+{
+	"1_TestStage":{
+		"Totem":{
+			"amount":1,
+			"price":15,
+			"currency":"Gold"
+		},
+		"HealthPotion":{
+			"amount":3,
+			"price":10,
+			"currency":"Gold"
+		},
+		"ManaPotion":{
+			"amount":3,
+			"price":10,
+			"currency":"Gold"
+		}
+	}
+}

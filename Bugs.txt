@@ -2,6 +2,8 @@
 - Kayarken oyuncu iki blok arasında sıkışıp kalabiliyor.
 - "Ayarlar" Menüsünde "Target FPS" kısmına harfler de yazılabiliniyor. (Sadece sayılar olmalı)
 - "CameraZoom" da zoom yaparken arkaplan görüntüsü bozuluyor. (Zoom out)
+- "BasicEnemy", Attack Range'i bozuk.
+- Envanterde "DraggingItem", slotların arkasında gözüküyor.
 
 [Fixed Bugs]
 - "CameraZoom" da oyuncu takla atınca ekran titriyor.

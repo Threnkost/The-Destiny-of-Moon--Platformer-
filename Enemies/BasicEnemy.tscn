@@ -1,7 +1,8 @@
-[gd_scene load_steps=24 format=2]
+[gd_scene load_steps=25 format=2]
 
 [ext_resource path="res://Assets/Sheets/Enemy/Idle.png" type="Texture" id=1]
 [ext_resource path="res://Enemies/BasicEnemy.gd" type="Script" id=2]
+[ext_resource path="res://Classes/Stats.tscn" type="PackedScene" id=3]
 [ext_resource path="res://UI/AnimatedBar.tscn" type="PackedScene" id=5]
 
 [sub_resource type="AnimationNodeAnimation" id=1]
@@ -233,6 +234,8 @@ anims/Idle = SubResource( 17 )
 anims/Stunned = SubResource( 18 )
 
 [node name="Tween" type="Tween" parent="."]
+
+[node name="Stats" parent="." instance=ExtResource( 3 )]
 
 [node name="CombatMechanics" type="Node" parent="."]
 

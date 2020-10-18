@@ -253,11 +253,15 @@ __meta__ = {
 [node name="LootChest" parent="Background" instance=ExtResource( 4 )]
 position = Vector2( 93, 206 )
 z_index = -1
+gold_amount = 500
 
 [node name="Merchant" parent="." instance=ExtResource( 9 )]
 position = Vector2( 382, 110 )
 z_index = -1
+id = "1_TestStage"
 
 [node name="BasicEnemy" parent="." instance=ExtResource( 10 )]
 position = Vector2( 536, 190 )
+life_state = 1
+current_state = 0
 [connection signal="body_entered" from="Deadzone" to="." method="_on_Deadzone_body_entered"]

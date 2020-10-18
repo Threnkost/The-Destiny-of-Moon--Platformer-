@@ -1,0 +1,4 @@
+1) Added camera zoom out/in.
+2) Improved inventory system.
+3) Added Merchant.
+4) Adding loot chest.

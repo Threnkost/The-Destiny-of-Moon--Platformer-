@@ -35,6 +35,7 @@ radius = 14.0
 collision_layer = 256
 collision_mask = 4
 script = ExtResource( 2 )
+json_file = "res://JSON/NPCs/ItinerantMerchant.json"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 autoplay = "Idle"
@@ -43,7 +44,6 @@ anims/Idle = SubResource( 1 )
 [node name="Sprite" type="Sprite" parent="."]
 texture = ExtResource( 1 )
 hframes = 8
-frame = 1
 
 [node name="KeyF" type="Sprite" parent="."]
 position = Vector2( -3, 51 )
