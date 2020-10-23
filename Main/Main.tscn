@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Main/Main.gd" type="Script" id=1]
 [ext_resource path="res://Maps/Chapter1/Chapter1TrainingScene.tscn" type="PackedScene" id=2]
@@ -8,6 +8,7 @@
 [ext_resource path="res://Maps/TestStage.tscn" type="PackedScene" id=6]
 [ext_resource path="res://UI/UI.tscn" type="PackedScene" id=7]
 [ext_resource path="res://UI/SettingsMenu.tscn" type="PackedScene" id=8]
+[ext_resource path="res://Debugging/DebugPanel.tscn" type="PackedScene" id=9]
 
 [node name="Main" type="Node2D"]
 script = ExtResource( 1 )
@@ -33,4 +34,7 @@ initial_stage_path = NodePath("TestStage")
 visible = false
 
 [node name="SettingsMenu" parent="UI" instance=ExtResource( 8 )]
+visible = false
+
+[node name="DebugPanel" parent="UI" instance=ExtResource( 9 )]
 visible = false

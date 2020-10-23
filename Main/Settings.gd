@@ -7,6 +7,7 @@ var settings := {
 	"fullscreen_mode":false,
 	"vsync_enabled":true,
 	"target_fps":60,
+	"volume":1.0
 }
 
 func _ready():
@@ -31,6 +32,11 @@ func set_target_fps(target_fps:int):
 	Engine.target_fps = target_fps
 	save_settings()
 
+func set_volume(volume) -> void:
+	settings["volume"] = volume
+	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Master"), volume)
+	save_settings()
+
 func save_settings() -> void:
 	var text_to_save = to_json(settings)
 	var file = File.new()
@@ -51,3 +57,4 @@ func load_settings() -> void:
 	set_fullscreen_mode(settings["fullscreen_mode"])
 	set_vsync_mode(settings["vsync_enabled"])
 	set_target_fps(settings["target_fps"])
+	set_volume(settings["volume"])

@@ -7,6 +7,7 @@ onready var main_scene
 onready var inventory
 onready var ui
 onready var stage_manager : StageManager
+onready var console
 
 var current_stage : Stage
 var last_check_point := {
@@ -19,6 +20,7 @@ func _ready():
 	stage_manager = main_scene.get_node("StageManager") 
 	inventory     = main_scene.get_node("UI/Inventory")
 	ui            = main_scene.get_node("UI/UI")
+	console       = main_scene.get_node("UI/DebugPanel")
 
 	player = main_scene.get_node("BufferZone/Player")
 

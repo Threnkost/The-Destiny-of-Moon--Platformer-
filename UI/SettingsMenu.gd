@@ -11,6 +11,7 @@ func _ready() -> void:
 	$Panel/Buttons/ShowFPS.pressed    = Settings.settings["show_fps"]
 	$Panel/Buttons/Vsync.pressed      = Settings.settings["vsync_enabled"]
 	$Panel/Buttons/TargetFps.value    = Settings.settings["target_fps"]
+	$Panel/Volume.value               = Settings.settings["volume"]
 
 func _on_Fullscreen_pressed():
 	Settings.set_fullscreen_mode($Panel/Buttons/Fullscreen.pressed)
@@ -23,3 +24,6 @@ func _on_CheckBox_pressed():
 
 func _on_TargetFps_value_changed(value):
 	Settings.set_target_fps(value)
+
+func _on_Volume_value_changed(value):
+	Settings.set_volume(value)

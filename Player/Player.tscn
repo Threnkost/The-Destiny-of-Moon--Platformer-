@@ -485,6 +485,12 @@ one_shot = true
 wait_time = 0.25
 one_shot = true
 
+[node name="FallingTime" type="Timer" parent="Timers"]
+wait_time = 0.1
+autostart = true
+
+[node name="StunTime" type="Timer" parent="Timers"]
+
 [node name="Wallet" type="Node" parent="."]
 script = ExtResource( 7 )
 
@@ -518,12 +524,21 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="Label" type="Label" parent="."]
+margin_left = -19.0
+margin_top = -28.0
+margin_right = 21.0
+margin_bottom = -14.0
+text = "0"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="Sprite" type="Sprite" parent="."]
 material = SubResource( 26 )
 texture = ExtResource( 2 )
 vframes = 11
 hframes = 7
-frame = 2
 __meta__ = {
 "_edit_lock_": true
 }
@@ -611,6 +626,8 @@ shape = SubResource( 29 )
 [connection signal="timeout" from="Timers/AttackCombinationTimer" to="." method="_on_AttackCombinationTimer_timeout"]
 [connection signal="timeout" from="Timers/CombinationCooldown" to="." method="_on_CombinationCooldown_timeout"]
 [connection signal="timeout" from="Timers/TumblingCooldown" to="." method="_on_TumblingCooldown_timeout"]
+[connection signal="timeout" from="Timers/FallingTime" to="." method="_on_FallingTime_timeout"]
+[connection signal="timeout" from="Timers/StunTime" to="." method="_on_StunTime_timeout"]
 [connection signal="body_entered" from="FirstAttackHitbox" to="." method="_on_RightHitbox_body_entered"]
 [connection signal="body_entered" from="SecondAttackHitbox" to="." method="_on_SecondAttackHitbox_body_entered"]
 [connection signal="body_entered" from="ThirdAttackHitbox" to="." method="_on_ThirdAttackHitbox_body_entered"]

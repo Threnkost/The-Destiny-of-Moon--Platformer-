@@ -15,13 +15,13 @@ var player_in := false
 func _ready():
 	if available:
 		assert(id, "Invalid loot chest id!")
-
+		
 		var file = File.new()
 		file.open(json_file, File.READ)
 		var data = parse_json(file.get_as_text())
 		data = data[id]
 		file.close()
-
+		
 		randomize()
 		gold_amount = rand_range(data["min_gold_value"], data["max_gold_value"])
 

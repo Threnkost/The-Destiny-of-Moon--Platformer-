@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=22 format=2]
 
 [ext_resource path="res://Maps/TestStage.gd" type="Script" id=1]
 [ext_resource path="res://Assets/Sheets/Temporary tileset.png" type="Texture" id=2]
@@ -10,23 +10,23 @@
 [ext_resource path="res://Assets/Backgrounds/Test/clouds_bg.png" type="Texture" id=8]
 [ext_resource path="res://NPCs/Merchant.tscn" type="PackedScene" id=9]
 [ext_resource path="res://Enemies/BasicEnemy.tscn" type="PackedScene" id=10]
+[ext_resource path="res://Sounds/OST/Clouds-Heaven (Temporary).ogg" type="AudioStream" id=11]
+[ext_resource path="res://Objects/MovingPlatform.tscn" type="PackedScene" id=12]
+[ext_resource path="res://Objects/PlatformPath.tscn" type="PackedScene" id=13]
 
-[sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 1673, 10 )
-
-[sub_resource type="ConvexPolygonShape2D" id=2]
+[sub_resource type="ConvexPolygonShape2D" id=1]
 points = PoolVector2Array( 16, 0, 16, 0, 16, 16, 0, 16 )
 
-[sub_resource type="ConvexPolygonShape2D" id=3]
+[sub_resource type="ConvexPolygonShape2D" id=2]
 points = PoolVector2Array( 0, 0, 16, 0, 16, 16, 0, 16 )
 
-[sub_resource type="ConvexPolygonShape2D" id=4]
+[sub_resource type="ConvexPolygonShape2D" id=3]
 points = PoolVector2Array( 0, 0, 16, 16, 16, 16, 0, 16 )
 
-[sub_resource type="ConvexPolygonShape2D" id=5]
+[sub_resource type="ConvexPolygonShape2D" id=4]
 points = PoolVector2Array( 0, 0, 16, 0, 16, 4, 0, 4 )
 
-[sub_resource type="TileSet" id=6]
+[sub_resource type="TileSet" id=5]
 0/name = "Temporary tileset.png 0"
 0/texture = ExtResource( 2 )
 0/tex_offset = Vector2( 0, 0 )
@@ -37,14 +37,14 @@ points = PoolVector2Array( 0, 0, 16, 0, 16, 4, 0, 4 )
 0/navigation_offset = Vector2( 0, 0 )
 0/shape_offset = Vector2( 0, 0 )
 0/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
-0/shape = SubResource( 2 )
+0/shape = SubResource( 1 )
 0/shape_one_way = false
 0/shape_one_way_margin = 1.0
 0/shapes = [ {
 "autotile_coord": Vector2( 0, 0 ),
 "one_way": false,
 "one_way_margin": 1.0,
-"shape": SubResource( 2 ),
+"shape": SubResource( 1 ),
 "shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
 } ]
 0/z_index = 0
@@ -58,14 +58,14 @@ points = PoolVector2Array( 0, 0, 16, 0, 16, 4, 0, 4 )
 1/navigation_offset = Vector2( 0, 0 )
 1/shape_offset = Vector2( 0, 0 )
 1/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
-1/shape = SubResource( 3 )
+1/shape = SubResource( 2 )
 1/shape_one_way = false
 1/shape_one_way_margin = 1.0
 1/shapes = [ {
 "autotile_coord": Vector2( 0, 0 ),
 "one_way": false,
 "one_way_margin": 1.0,
-"shape": SubResource( 3 ),
+"shape": SubResource( 2 ),
 "shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
 } ]
 1/z_index = 0
@@ -79,14 +79,14 @@ points = PoolVector2Array( 0, 0, 16, 0, 16, 4, 0, 4 )
 2/navigation_offset = Vector2( 0, 0 )
 2/shape_offset = Vector2( 0, 0 )
 2/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
-2/shape = SubResource( 4 )
+2/shape = SubResource( 3 )
 2/shape_one_way = false
 2/shape_one_way_margin = 1.0
 2/shapes = [ {
 "autotile_coord": Vector2( 0, 0 ),
 "one_way": false,
 "one_way_margin": 1.0,
-"shape": SubResource( 4 ),
+"shape": SubResource( 3 ),
 "shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
 } ]
 2/z_index = 0
@@ -100,22 +100,22 @@ points = PoolVector2Array( 0, 0, 16, 0, 16, 4, 0, 4 )
 3/navigation_offset = Vector2( 0, 0 )
 3/shape_offset = Vector2( 0, 0 )
 3/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
-3/shape = SubResource( 5 )
+3/shape = SubResource( 4 )
 3/shape_one_way = true
 3/shape_one_way_margin = 1.0
 3/shapes = [ {
 "autotile_coord": Vector2( 0, 0 ),
 "one_way": true,
 "one_way_margin": 1.0,
-"shape": SubResource( 5 ),
+"shape": SubResource( 4 ),
 "shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
 } ]
 3/z_index = 0
 
-[sub_resource type="ConvexPolygonShape2D" id=7]
+[sub_resource type="ConvexPolygonShape2D" id=6]
 points = PoolVector2Array( 0, 0, 16, 0, 16, 4, 0, 4 )
 
-[sub_resource type="TileSet" id=8]
+[sub_resource type="TileSet" id=7]
 0/name = "Temporary tileset.png 0"
 0/texture = ExtResource( 2 )
 0/tex_offset = Vector2( 0, 0 )
@@ -126,17 +126,20 @@ points = PoolVector2Array( 0, 0, 16, 0, 16, 4, 0, 4 )
 0/navigation_offset = Vector2( 0, 0 )
 0/shape_offset = Vector2( 0, 0 )
 0/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
-0/shape = SubResource( 7 )
+0/shape = SubResource( 6 )
 0/shape_one_way = true
 0/shape_one_way_margin = 1.0
 0/shapes = [ {
 "autotile_coord": Vector2( 0, 0 ),
 "one_way": true,
 "one_way_margin": 1.0,
-"shape": SubResource( 7 ),
+"shape": SubResource( 6 ),
 "shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
 } ]
 0/z_index = 0
+
+[sub_resource type="RectangleShape2D" id=8]
+extents = Vector2( 1673, 10 )
 
 [node name="TestStage" type="Node2D" groups=[
 "Enemy",
@@ -146,14 +149,16 @@ __meta__ = {
 "_edit_lock_": true
 }
 start_position_node = NodePath("StartPosition")
+map_ost_node = NodePath("MapOST")
 
 [node name="Camera" parent="." instance=ExtResource( 3 )]
 
+[node name="MapOST" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 11 )
+volume_db = 1.25
+
 [node name="StartPosition" type="Position2D" parent="."]
-position = Vector2( 92.5678, 75.9373 )
-__meta__ = {
-"_edit_lock_": true
-}
+position = Vector2( 160, 192 )
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="."]
 
@@ -201,24 +206,6 @@ __meta__ = {
 "_edit_lock_": true
 }
 
-[node name="Deadzone" type="Area2D" parent="."]
-collision_layer = 4
-collision_mask = 10
-__meta__ = {
-"_edit_lock_": true
-}
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Deadzone"]
-position = Vector2( 280, 347 )
-shape = SubResource( 1 )
-
-[node name="CameraZoom" parent="." instance=ExtResource( 5 )]
-position = Vector2( 384, 120 )
-scale = Vector2( 5.90632, 4.60967 )
-speed = 0.5
-zoom_scale = 0.25
-zoom_type = 1
-
 [node name="Background" type="Node2D" parent="."]
 z_index = -1
 __meta__ = {
@@ -227,7 +214,7 @@ __meta__ = {
 
 [node name="TileMap" type="TileMap" parent="Background"]
 position = Vector2( 160, 88 )
-tile_set = SubResource( 6 )
+tile_set = SubResource( 5 )
 cell_size = Vector2( 16, 16 )
 collision_layer = 4
 collision_mask = 10
@@ -240,7 +227,7 @@ __meta__ = {
 
 [node name="Platforms" type="TileMap" parent="Background"]
 position = Vector2( 160, 88 )
-tile_set = SubResource( 8 )
+tile_set = SubResource( 7 )
 cell_size = Vector2( 16, 16 )
 collision_layer = 128
 collision_mask = 10
@@ -255,13 +242,45 @@ position = Vector2( 93, 206 )
 z_index = -1
 id = "1_TestStage"
 
-[node name="Merchant" parent="." instance=ExtResource( 9 )]
+[node name="MovingPlatforms" type="Node2D" parent="."]
+
+[node name="MovingPlatform" parent="MovingPlatforms" instance=ExtResource( 12 )]
+position = Vector2( 64, 184 )
+speed = 5.0
+
+[node name="PlatformPath" parent="MovingPlatforms/MovingPlatform" instance=ExtResource( 13 )]
+position = Vector2( -0.337838, -0.102737 )
+scale = Vector2( 1, 1 )
+points = PoolVector2Array( 0, 0, 0, -200.897 )
+
+[node name="NPCs" type="Node2D" parent="."]
+
+[node name="Merchant" parent="NPCs" instance=ExtResource( 9 )]
 position = Vector2( 382, 110 )
 z_index = -1
 id = "1_TestStage"
 
-[node name="BasicEnemy" parent="." instance=ExtResource( 10 )]
+[node name="Enemies" type="Node2D" parent="."]
+
+[node name="BasicEnemy" parent="Enemies" instance=ExtResource( 10 )]
 position = Vector2( 536, 190 )
-life_state = 1
 current_state = 0
+
+[node name="Deadzone" type="Area2D" parent="."]
+collision_layer = 4
+collision_mask = 10
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Deadzone"]
+position = Vector2( 280, 347 )
+shape = SubResource( 8 )
+
+[node name="CameraZoom" parent="." instance=ExtResource( 5 )]
+position = Vector2( 384, 115 )
+scale = Vector2( 5.90632, 4.60967 )
+speed = 0.5
+zoom_scale = 0.25
+zoom_type = 1
 [connection signal="body_entered" from="Deadzone" to="." method="_on_Deadzone_body_entered"]

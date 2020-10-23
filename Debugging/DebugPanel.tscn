@@ -1,0 +1,49 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://Debugging/DebugPanel.gd" type="Script" id=1]
+[ext_resource path="res://Themes/UI.tres" type="Theme" id=2]
+[ext_resource path="res://Assets/UI/close_button.png" type="Texture" id=3]
+[ext_resource path="res://Debugging/CommandList.gd" type="Script" id=4]
+
+[node name="DebugPanel" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 2 )
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CommandList" type="Node" parent="."]
+script = ExtResource( 4 )
+
+[node name="Console" type="TextEdit" parent="."]
+margin_left = 16.0
+margin_top = 16.0
+margin_right = 368.0
+margin_bottom = 184.0
+readonly = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Input" type="LineEdit" parent="."]
+margin_left = 16.0
+margin_top = 187.0
+margin_right = 368.0
+margin_bottom = 217.0
+placeholder_text = "> Enter an command"
+
+[node name="CloseButton" type="TextureButton" parent="."]
+margin_left = 16.0
+margin_right = 33.0
+margin_bottom = 17.0
+rect_min_size = Vector2( 17, 17 )
+focus_mode = 0
+enabled_focus_mode = 0
+texture_normal = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+[connection signal="text_entered" from="Input" to="." method="_on_Input_text_entered"]
+[connection signal="pressed" from="CloseButton" to="." method="_on_CloseButton_pressed"]

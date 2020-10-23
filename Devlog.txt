@@ -1,4 +1,19 @@
-1) Added camera zoom out/in. [17.10.2020]
-2) Improved inventory system. [17.10.2020] - [18.10.202]
-3) Added Merchant. [18.10.2020]
-4) Added loot chest. [18.10.2020]
+[17.10.2020]
+- Added camera zoom out/in
+- Improved inventory system.
+
+[18.10.2020]
+- Added Merchant.
+- Added loot chest.
+
+[19.10.2020]
+- Added volume option.
+
+[21.10.2020]
+- Added moving platforms.
+- Added fall damage for player.
+- Added basic stun mechanic to player.
+
+[22.10.2020]
+- Added "God Mode" for player.
+- Adding "Debugging Panel".

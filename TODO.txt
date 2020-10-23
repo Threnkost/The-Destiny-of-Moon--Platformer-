@@ -7,6 +7,8 @@
 - Diyalog sistemi.
 - Seyyar Tüccar'ın UI geliştirilmeli.
 - LootChest geliştirilmeli.
+- Oyuncu çok yüksekten düşerse bir miktar hasar alıp sersemlesin.
+- Düşme hasarını düzenle.
 
 [COMPLETED]
 - Animated Health Bar.

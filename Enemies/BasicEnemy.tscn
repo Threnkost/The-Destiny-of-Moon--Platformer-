@@ -263,7 +263,6 @@ margin_bottom = 31.0
 [node name="Sprite" type="Sprite" parent="."]
 texture = ExtResource( 1 )
 hframes = 4
-frame = 1
 __meta__ = {
 "_edit_lock_": true
 }

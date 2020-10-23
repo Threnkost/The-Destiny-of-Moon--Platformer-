@@ -8,6 +8,7 @@ const SNAP_DIRECTION = Vector2.DOWN
 export (float) var speed = 1
 export (float) var tumbling_speed = 1
 export (float) var jumping_force = 1
+export (bool) var god_mode := false
 
 enum {
 	MOVING,
@@ -26,6 +27,10 @@ var can_jump := true
 var can_move := true
 var is_jumping := false
 var active_camera : Camera2D
+
+const FALLING_TIMER_TICK = 0.1
+const HIGH_FALLING_TIME = 0.9
+var falling_time := 0.0
 
 var tumbling_cooldown := false setget set_tumbling_cooldown
 
@@ -48,6 +53,7 @@ func _ready():
 	.emit_signal("mana_point_changed", mana_point, max_mana_point)
 
 func _physics_process(delta):
+	$Label.text = str(falling_time)
 	$AnimationPlayer.playback_speed = 1.0
 
 	if _is_top_raycasts_colliding():
@@ -60,6 +66,11 @@ func _physics_process(delta):
 	if is_on_floor():#_is_bottom_raycasts_colliding():
 		velocity.y = 0
 		snap_velocity = SNAP_LENGTH * SNAP_DIRECTION
+		if falling_time >= 0.0:
+			if falling_time >= HIGH_FALLING_TIME:
+				set_health(health_point - 5)
+				stun(falling_time)
+			falling_time = 0.0
 
 	if Input.is_action_just_pressed("Jump") and can_jump and is_on_floor() and current_state != TUMBLING:
 		if bad_state != bad_states.STUNNED:
@@ -96,6 +107,9 @@ func _handle_inputs():
 	if Input.is_action_just_pressed("OpenInventory"):
 		Global.inventory.visible = !Global.inventory.visible
 	
+	if Input.is_action_just_pressed("OpenConsole"):
+		Global.console.visible = !Global.console.visible
+
 	if Input.is_action_pressed("Attack") && current_state != ATTACKING && !attack_cooldown:
 		if bad_state != bad_states.STUNNED:
 			current_state = ATTACKING
@@ -115,6 +129,8 @@ func _handle_inputs():
 
 func _handle_states(delta):
 	if bad_state == bad_states.STUNNED:
+		velocity.x  = 0
+		velocity2.x = 0
 		state_machine_player.travel("Stunned")
 		return
 	match current_state:
@@ -129,6 +145,11 @@ func _handle_states(delta):
 			#var anim_length = $AnimationPlayer.get_animation("Tumble").length
 			state_machine_player.travel("Tumble")
 			slide_directly_horizontal(tumbling_speed, 0, 0.2) 
+
+func stun(duration = 0.5) -> void:
+	$Timers/StunTime.wait_time = $Timers/StunTime.time_left + duration
+	$Timers/StunTime.start()
+	bad_state = bad_states.STUNNED
 
 func _attack():
 	velocity.x = 0
@@ -198,6 +219,13 @@ func _on_AttackCombinationTimer_timeout():
 func _on_TumblingCooldown_timeout():
 	tumbling_cooldown = false
 
+func _on_FallingTime_timeout():
+	if !is_on_floor():
+		falling_time += FALLING_TIMER_TICK
+
+func _on_StunTime_timeout():
+	bad_state = bad_states.NORMAL
+
 func _attack_if_enemy(body:Node, damage := 0, index := 0):
 	if body.is_in_group("Enemy"):
 		var total_damage = damage * normal_attack_proportions[index]
@@ -208,7 +236,7 @@ func _attack_if_enemy(body:Node, damage := 0, index := 0):
 		print("Attacked : ", body.name, " value : ", total_damage)
 
 func is_damagable() -> bool:
-	return current_state != TUMBLING
+	return current_state != TUMBLING and !god_mode
 
 func _on_RightHitbox_body_entered(body):
 	_attack_if_enemy(body, stats.get_stat_amount("AttackDamage"), 0)
@@ -227,3 +255,7 @@ func _debug():
 	$BottomRaycastDebug.text = str($Tumbling.is_colliding())#str(is_on_floor())#_is_bottom_raycasts_colliding())
 	$BottomRaycastDebug.visible = true
 	$Stunned.visible = bad_state == bad_states.STUNNED
+
+func set_health(new_health):
+	if !god_mode:
+		.set_health(new_health)

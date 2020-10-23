@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=2]
+
+[sub_resource type="Curve" id=1]
+_data = [ Vector2( 0.227273, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0 ), 0.0, 0.0, 0, 0 ]
+
+[node name="PlatformPath" type="Line2D"]
+position = Vector2( -0.337838, 0 )
+scale = Vector2( 0.932432, 1 )
+points = PoolVector2Array( 0, 0, 60, 0 )
+width = 5.0
+width_curve = SubResource( 1 )
+default_color = Color( 0.564706, 0.0588235, 0.309804, 1 )
+antialiased = true
