@@ -16,4 +16,9 @@
 
 [22.10.2020]
 - Added "God Mode" for player.
-- Adding "Debugging Panel".
+- Started to code "Debugging Panel".
+
+[23.10.2020]
+- Adding "UI slots" for consumable items. [NOT FINISHED]
+- Added "acceleration" to player.
+- Added "hacks".

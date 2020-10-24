@@ -21,6 +21,9 @@ func _ready():
 	add_item(item1, 95)
 	add_item(item2)
 
+	remove_item(item1, 8)
+
+
 func _process(delta):
 	if dragging_item["item"] and dragging_item["amount"] >= 1:
 		$DraggingItem.visible = true
@@ -30,7 +33,20 @@ func _process(delta):
 		$DraggingItem.visible = false
 		$DraggingItem.texture = null
 
+
+func _update_ui_slots(item : Item, amount : int) -> void:
+	for i in Global.ui.get_node("Slots").get_children():
+		if i.item == item:
+			i.amount = amount
+			if i.amount <= 0:
+				i.clear()
+			
+				
 func add_item(it, n := 1) -> bool:
+	for slot in Global.ui.get_node("Slots").get_children():
+		if slot.item == it:
+			slot.amount += n
+			return true
 	var empty_slots := []
 	for slot in item_container.get_children():
 		if slot.is_valid() and slot.is_same(it):
@@ -45,18 +61,26 @@ func add_item(it, n := 1) -> bool:
 		return true
 	return false
 
+
 func remove_item(it, n := 1 ) -> bool:
+	for slot in Global.ui.get_node("Slots").get_children():
+		if slot.item == it:
+			slot.amount -= n
+			return true
 	for slot in item_container.get_children():
 		if slot.is_valid() and slot.is_same(it):
 			slot.amount -= n
+			_update_ui_slots(it, slot.amount)
 			return true
 	return false
+
 
 func update_description(item_name:="", item_description:=""):
 	$Background/ItemDescription.text = """%s
 
 %s
 """ % [item_name, item_description]
+
 
 func _on_CloseButton_pressed():
 	visible = false

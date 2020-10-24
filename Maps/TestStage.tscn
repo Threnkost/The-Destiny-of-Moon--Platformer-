@@ -149,18 +149,9 @@ __meta__ = {
 "_edit_lock_": true
 }
 start_position_node = NodePath("StartPosition")
-map_ost_node = NodePath("MapOST")
-
-[node name="Camera" parent="." instance=ExtResource( 3 )]
-
-[node name="MapOST" type="AudioStreamPlayer" parent="."]
-stream = ExtResource( 11 )
-volume_db = 1.25
-
-[node name="StartPosition" type="Position2D" parent="."]
-position = Vector2( 160, 192 )
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+scroll_ignore_camera_zoom = true
 
 [node name="Sky" type="ParallaxLayer" parent="ParallaxBackground"]
 motion_scale = Vector2( 0.1, 0.1 )
@@ -204,6 +195,18 @@ texture = ExtResource( 7 )
 centered = false
 __meta__ = {
 "_edit_lock_": true
+}
+
+[node name="MapOST" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 11 )
+volume_db = 1.25
+
+[node name="Camera" parent="." instance=ExtResource( 3 )]
+
+[node name="StartPosition" type="Position2D" parent="."]
+position = Vector2( 160, 192 )
+__meta__ = {
+"_gizmo_extents_": 20.0
 }
 
 [node name="Background" type="Node2D" parent="."]

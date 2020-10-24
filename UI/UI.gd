@@ -3,9 +3,24 @@ extends Control
 onready var health_bar
 onready var mana_bar
 
+
+enum hacks {
+	A = 1
+	B = 2
+	C = 4
+}
+export (int, FLAGS, "A", "B", "C") var a = 0
+
 func _ready():
 	health_bar = $Bars/HealthBar
 	mana_bar   = $Bars/ManaBar
+	
+	if a & hacks.A:
+		print("A")
+	if a & hacks.B:
+		print("B")
+	if a & hacks.C:
+		print("C")
 
 func _physics_process(delta):
 	$Money/Label.text = str(Global.player.wallet.currencies["Gold"].value)	

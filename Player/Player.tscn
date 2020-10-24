@@ -443,6 +443,7 @@ max_mana_point = 40
 speed = 170.0
 tumbling_speed = 75.0
 jumping_force = 300.0
+hack = 5
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/Attack1 = SubResource( 1 )
@@ -539,6 +540,7 @@ material = SubResource( 26 )
 texture = ExtResource( 2 )
 vframes = 11
 hframes = 7
+frame = 2
 __meta__ = {
 "_edit_lock_": true
 }

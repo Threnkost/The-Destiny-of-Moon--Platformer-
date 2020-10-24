@@ -18,6 +18,6 @@ func end_stage():
 func _on_Deadzone_body_entered(body):
 	body.velocity = Vector2.ZERO
 	body.falling_time = 0.0
-	body.global_position = $StartPosition.global_position
-	body.stun(1)
+	body.stun(2)
 	body.health_point -= 5
+	body.global_position = $StartPosition.global_position

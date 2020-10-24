@@ -8,7 +8,17 @@ const SNAP_DIRECTION = Vector2.DOWN
 export (float) var speed = 1
 export (float) var tumbling_speed = 1
 export (float) var jumping_force = 1
-export (bool) var god_mode := false
+export (int, FLAGS, 
+	"NO_DAMAGE",
+	"NO_MANA_USAGE",
+	"NO_STUNNING") var hack = 0
+
+
+enum hacks {
+	NO_DAMAGE = 1,
+	NO_MANA_USAGE = 2,
+	NO_STUNNING = 4
+}
 
 enum {
 	MOVING,
@@ -21,6 +31,9 @@ onready var state_machine_player
 onready var wallet = $Wallet
 
 #MECHANICS
+const ACCELERATION = 0.5
+const FRICTION = 0.25
+
 var current_state = MOVING setget set_state
 
 var can_jump := true
@@ -67,7 +80,7 @@ func _physics_process(delta):
 		velocity.y = 0
 		snap_velocity = SNAP_LENGTH * SNAP_DIRECTION
 		if falling_time >= 0.0:
-			if falling_time >= HIGH_FALLING_TIME:
+			if falling_time >= HIGH_FALLING_TIME and is_damagable():
 				set_health(health_point - 5)
 				stun(falling_time)
 			falling_time = 0.0
@@ -147,9 +160,10 @@ func _handle_states(delta):
 			slide_directly_horizontal(tumbling_speed, 0, 0.2) 
 
 func stun(duration = 0.5) -> void:
-	$Timers/StunTime.wait_time = $Timers/StunTime.time_left + duration
-	$Timers/StunTime.start()
-	bad_state = bad_states.STUNNED
+	if !(hack & hacks.NO_STUNNING):
+		$Timers/StunTime.wait_time = $Timers/StunTime.time_left + duration
+		$Timers/StunTime.start()
+		bad_state = bad_states.STUNNED
 
 func _attack():
 	velocity.x = 0
@@ -164,17 +178,23 @@ func _attack():
 			$Timers/AttackCombinationTimer.stop()
 
 func _move():
-	velocity.x = Input.get_action_strength("MoveRight") - Input.get_action_strength("MoveLeft")
-	velocity.x *= speed * int(can_move)
-
-	if velocity.x > 0:
+	#velocity.x = Input.get_action_strength("MoveRight") - Input.get_action_strength("MoveLeft")
+	var value
+	if Input.is_action_pressed("MoveRight"):
 		self.direction = 1
-	elif velocity.x < 0:
+		value = speed * self.direction
+	elif Input.is_action_pressed("MoveLeft"):
 		self.direction = -1
+		value = speed * self.direction
+	else:
+		value = 0
+	#velocity.x *= speed * int(can_move)
 
-	if velocity.x != 0:
+	if value != 0:
+		velocity.x = lerp(velocity.x, self.direction * speed * int(can_move), ACCELERATION)
 		state_machine_player.travel("Running")
 	else:
+		velocity.x = lerp(velocity.x, 0, FRICTION)
 		state_machine_player.travel("Idle")
 
 func _is_top_raycasts_colliding() -> bool:
@@ -236,7 +256,9 @@ func _attack_if_enemy(body:Node, damage := 0, index := 0):
 		print("Attacked : ", body.name, " value : ", total_damage)
 
 func is_damagable() -> bool:
-	return current_state != TUMBLING and !god_mode
+	if hack & hacks.NO_DAMAGE:
+		return false
+	return current_state != TUMBLING
 
 func _on_RightHitbox_body_entered(body):
 	_attack_if_enemy(body, stats.get_stat_amount("AttackDamage"), 0)
@@ -257,5 +279,4 @@ func _debug():
 	$Stunned.visible = bad_state == bad_states.STUNNED
 
 func set_health(new_health):
-	if !god_mode:
-		.set_health(new_health)
+	.set_health(new_health)
