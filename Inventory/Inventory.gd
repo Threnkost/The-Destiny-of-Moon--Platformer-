@@ -1,4 +1,5 @@
-extends Control
+extends UIWindow
+#extends Control
 
 export (NodePath) var item_container_path
 
@@ -23,6 +24,19 @@ func _ready():
 
 	remove_item(item1, 8)
 
+
+func open() -> void:
+	if is_openable():
+		.open()
+		visible = true
+		Global.current_ui_window = self
+
+func close() -> void:
+	.close()
+	visible = false
+	Global.current_ui_window = null
+	
+	$Background/ItemDescription.text = ""
 
 func _process(delta):
 	if dragging_item["item"] and dragging_item["amount"] >= 1:
@@ -83,5 +97,4 @@ func update_description(item_name:="", item_description:=""):
 
 
 func _on_CloseButton_pressed():
-	visible = false
-	$Background/ItemDescription.text = ""
+	close()

@@ -1,4 +1,4 @@
-extends Control
+extends UIWindow
 
 const UI_SLOT = preload("res://UI/MerchantUIButton.tscn")
 
@@ -7,9 +7,9 @@ onready var path
 #AT START
 func initialize(data : Dictionary) -> void:
 	for i in data:
-		var item  = load("res://Items/Resources/" + i + ".tres")
-		var price = data[i]["price"]
-		var amount = data[i]["amount"]
+		var item     = load("res://Items/Resources/" + i + ".tres")
+		var price    = data[i]["price"]
+		var amount   = data[i]["amount"]
 		var currency = data[i]["currency"]
 
 		var slot = UI_SLOT.instance()
@@ -18,13 +18,20 @@ func initialize(data : Dictionary) -> void:
 		$Background/Items.add_child(slot)
 
 func open() -> void:
-	visible = true
-	Global.main_scene.get_node("UI").add_child(self)
-	$Background/ItemDescription.text = ""
+	if is_openable():
+		.open()
+		visible = true
+		Global.main_scene.get_node("UI").add_child(self)
+		Global.current_ui_window = self
+		$Background/ItemDescription.text = ""
+
 
 func close() -> void:
+	.close()
 	visible = false
 	Global.main_scene.get_node("UI").remove_child(self)
+	Global.current_ui_window = null
+
 
 func _process(delta):
 	$Background/Gold.text = str(Global.player.wallet.currencies["Gold"].value)

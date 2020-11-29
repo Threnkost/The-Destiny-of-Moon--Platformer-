@@ -9,6 +9,7 @@ onready var ui
 onready var stage_manager : StageManager
 onready var console
 
+var current_ui_window = null
 var current_stage : Stage
 var last_check_point := {
 	"map_name":"invalid",
@@ -16,6 +17,8 @@ var last_check_point := {
 }
 
 func _ready():
+	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
+
 	main_scene    = get_node("/root/Main")
 	stage_manager = main_scene.get_node("StageManager") 
 	inventory     = main_scene.get_node("UI/Inventory")

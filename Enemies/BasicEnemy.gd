@@ -1,8 +1,9 @@
 extends Entity
 
-export (float) var speed = 300
-export (float) var attack_range = 1.0
-export (int) var ai_react_time = 400 #AI
+enum dimensions {
+	WORLD,
+	SPIRITUAL
+}
 
 #STATE MACHINE
 enum ai_states {
@@ -11,6 +12,11 @@ enum ai_states {
 	ATTACKING,
 	WALKING
 }
+
+export (float) var speed = 300
+export (float) var attack_range = 1.0
+export (int) var ai_react_time = 400 #AI
+export (dimensions) var dimension = dimensions.WORLD
 
 onready var anim_tree:AnimationNodeStateMachinePlayback
 
@@ -59,6 +65,11 @@ func damage(damager, damage, push_scale:=1) -> void:
 func _physics_process(delta) -> void:
 	$HealthBar.true_max_value = max_health_point
 	$HealthBar.true_value     = health_point
+
+	if Global.player.current_dimension != dimension:
+		modulate = Color(1,1,1,0.5)
+	else:
+		modulate = Color(1,1,1,1)
 
 	velocity.y += GRAVITY
 	if velocity.y >= MAX_GRAVITY:

@@ -4,7 +4,7 @@
 [ext_resource path="res://Assets/UI/health_bar.png" type="Texture" id=2]
 [ext_resource path="res://Themes/UI.tres" type="Theme" id=3]
 [ext_resource path="res://UI/AnimatedBar.tscn" type="PackedScene" id=4]
-[ext_resource path="res://Assets/UI/Money.png" type="Texture" id=5]
+[ext_resource path="res://Assets/AnimatedTextures/Gold (Temporary).tres" type="Texture" id=5]
 [ext_resource path="res://UI/UiItemSlot.tscn" type="PackedScene" id=6]
 
 [node name="UI" type="Control"]
@@ -16,7 +16,6 @@ __meta__ = {
 "_edit_lock_": true,
 "_edit_use_anchors_": false
 }
-a = 5
 
 [node name="Bars" type="VBoxContainer" parent="."]
 margin_left = 5.201
@@ -88,11 +87,14 @@ __meta__ = {
 }
 
 [node name="Label" type="Label" parent="Money"]
-margin_left = 14.0
-margin_top = -3.0
-margin_right = 53.0
-margin_bottom = 17.0
+margin_left = 15.0
+margin_top = -2.0
+margin_right = 54.0
+margin_bottom = 18.0
 text = "0"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Slots" type="HBoxContainer" parent="."]
 margin_top = 191.0
@@ -114,3 +116,13 @@ anchor_bottom = 0.0
 margin_left = 22.0
 margin_right = 40.0
 margin_bottom = 40.0
+
+[node name="Dimension" type="TextureRect" parent="."]
+margin_left = 136.0
+margin_top = 7.0
+margin_right = 152.0
+margin_bottom = 23.0
+rect_min_size = Vector2( 16, 16 )
+__meta__ = {
+"_edit_use_anchors_": false
+}

@@ -1,10 +1,17 @@
-extends Control
+extends UIWindow
 
 func open() -> void:
-	visible = true
-
-func hide() -> void:
+	if is_openable():
+		.open()
+		visible = true
+		Global.current_ui_window = self
+		
+	
+func close() -> void:
+	.close()
 	visible = false
+	Global.current_ui_window = null
+	
 
 func _ready() -> void:
 	$Panel/Buttons/Fullscreen.pressed = Settings.settings["fullscreen_mode"]

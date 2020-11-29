@@ -149,6 +149,7 @@ __meta__ = {
 "_edit_lock_": true
 }
 start_position_node = NodePath("StartPosition")
+audio_node = NodePath("MapOST")
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="."]
 scroll_ignore_camera_zoom = true

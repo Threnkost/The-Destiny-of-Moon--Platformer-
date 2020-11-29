@@ -3,15 +3,14 @@ extends Node2D
 class_name Stage
 
 export (bool) var player_active = true
-export (NodePath) var start_position_node
-export (NodePath) var map_ost_node
+export (NodePath) onready var start_position_node = get_node(start_position_node) as Position2D
+export (NodePath) onready var audio_node = get_node(audio_node) as AudioStreamPlayer
 
 onready var start_position:Vector2
-onready var map_ost
 
 func _ready():
-	start_position = get_node(start_position_node).global_position
-	map_ost = get_node(map_ost_node)
+	start_position = start_position_node.global_position
+	#map_ost = get_node(map_ost_node)
 
 func start_stage():
 	Global.stage_manager.add_child(self)
@@ -20,16 +19,16 @@ func start_stage():
 		add_child(Global.player)
 		Global.player.add_to_group("Player")
 		Global.player.global_position = start_position
-	if map_ost:
-		map_ost.playing = true
+	if audio_node:
+		audio_node.playing = true
 	
 func end_stage():
 	Global.stage_manager.remove_child(self)
 	if player_active:
 		remove_child(Global.player)
 		Global.player.remove_from_group("Player")
-	if map_ost:
-		map_ost.playing = false
+	if audio_node:
+		audio_node.playing = false
 				
 		
 		

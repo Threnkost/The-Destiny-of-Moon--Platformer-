@@ -1,5 +1,7 @@
 extends Entity
 
+signal dimension_changed()
+
 const LOOK_UP_DISTANCE = 150
 
 const SNAP_LENGTH = 8.0
@@ -11,13 +13,15 @@ export (float) var jumping_force = 1
 export (int, FLAGS, 
 	"NO_DAMAGE",
 	"NO_MANA_USAGE",
-	"NO_STUNNING") var hack = 0
+	"NO_STUNNING",
+	"UNLIMITED_MONEY") var hack = 0
 
 
 enum hacks {
 	NO_DAMAGE = 1,
 	NO_MANA_USAGE = 2,
-	NO_STUNNING = 4
+	NO_STUNNING = 4,
+	UNLIMITED_MONEY = 8
 }
 
 enum {
@@ -26,18 +30,24 @@ enum {
 	TUMBLING,
 }
 
+enum dimensions {
+	WORLD,
+	SPIRITUAL
+}
+
 #NODES & RESOURCES
 onready var state_machine_player
 onready var wallet = $Wallet
 
 #MECHANICS
 const ACCELERATION = 0.5
-const FRICTION = 0.25
+const FRICTION     = 0.25
 
-var current_state = MOVING setget set_state
+var current_state     = MOVING setget set_state
+var current_dimension = dimensions.WORLD setget set_dimension
 
-var can_jump := true
-var can_move := true
+var can_jump   := true
+var can_move   := true
 var is_jumping := false
 var active_camera : Camera2D
 
@@ -61,13 +71,19 @@ func _ready():
 
 	.connect("health_point_changed", Global.ui, "_on_Player_health_changed")
 	.connect("mana_point_changed", Global.ui, "_on_Player_mana_changed")
+	.connect("dimension_changed", Global.ui, "_on_Player_changed_dimension")
 
 	.emit_signal("health_point_changed", health_point, max_health_point)
 	.emit_signal("mana_point_changed", mana_point, max_mana_point)
+	.emit_signal("dimension_changed", "world")
 
 func _physics_process(delta):
 	$Label.text = str(falling_time)
 	$AnimationPlayer.playback_speed = 1.0
+
+	if hack & hacks.UNLIMITED_MONEY:
+		for currency in $Wallet.get_children():
+			currency.value = currency.max_value
 
 	if _is_top_raycasts_colliding():
 		velocity.y = abs(velocity.y) / 1.5
@@ -80,15 +96,13 @@ func _physics_process(delta):
 		velocity.y = 0
 		snap_velocity = SNAP_LENGTH * SNAP_DIRECTION
 		if falling_time >= 0.0:
-			if falling_time >= HIGH_FALLING_TIME and is_damagable():
+			if falling_time >= HIGH_FALLING_TIME && is_damagable():
 				set_health(health_point - 5)
 				stun(falling_time)
 			falling_time = 0.0
-
-	if Input.is_action_just_pressed("Jump") and can_jump and is_on_floor() and current_state != TUMBLING:
-		if bad_state != bad_states.STUNNED:
-			snap_velocity = Vector2.ZERO
-			velocity.y = -jumping_force		
+			
+	if Global.current_ui_window:
+		velocity.x = 0
 
 	_check_direction()
 	_handle_inputs()
@@ -115,13 +129,32 @@ func _handle_inputs():
 	if Input.is_action_just_pressed("ui_cancel"):
 		var node = Global.main_scene.get_node("UI/SettingsMenu")
 		var visibility = node.visible
-		node.open() if not visibility else node.hide()
+		node.open() if !visibility else node.close()
 
 	if Input.is_action_just_pressed("OpenInventory"):
-		Global.inventory.visible = !Global.inventory.visible
+		if !Global.inventory.visible:
+			Global.inventory.open()
+		else:
+			Global.inventory.close()
 	
 	if Input.is_action_just_pressed("OpenConsole"):
-		Global.console.visible = !Global.console.visible
+		if !Global.console.visible:
+			Global.console.open()
+		else:
+			Global.console.close()
+
+	if Input.is_action_just_pressed("DimensionTransition"):
+		var next_dimension = dimensions.WORLD if current_dimension == dimensions.SPIRITUAL else dimensions.SPIRITUAL
+		set_dimension(next_dimension)
+
+	if Global.current_ui_window:
+		return
+	
+	var jump_strength = Input.get_action_strength("Jump")
+	if jump_strength > 0 && can_jump && is_on_floor() && current_state != TUMBLING:
+		if bad_state != bad_states.STUNNED:
+			snap_velocity = Vector2.ZERO
+			velocity.y = -jumping_force * jump_strength
 
 	if Input.is_action_pressed("Attack") && current_state != ATTACKING && !attack_cooldown:
 		if bad_state != bad_states.STUNNED:
@@ -178,17 +211,15 @@ func _attack():
 			$Timers/AttackCombinationTimer.stop()
 
 func _move():
-	#velocity.x = Input.get_action_strength("MoveRight") - Input.get_action_strength("MoveLeft")
-	var value
-	if Input.is_action_pressed("MoveRight"):
-		self.direction = 1
-		value = speed * self.direction
-	elif Input.is_action_pressed("MoveLeft"):
+	if Global.current_ui_window:
+		return
+		
+	var value = (Input.get_action_strength("MoveRight")
+		 - Input.get_action_strength("MoveLeft"))
+	if value < 0: #LEFT
 		self.direction = -1
-		value = speed * self.direction
-	else:
-		value = 0
-	#velocity.x *= speed * int(can_move)
+	elif value > 0: #RIGHT
+		self.direction = 1
 
 	if value != 0:
 		velocity.x = lerp(velocity.x, self.direction * speed * int(can_move), ACCELERATION)
@@ -270,13 +301,28 @@ func _on_ThirdAttackHitbox_body_entered(body):
 	_attack_if_enemy(body, stats.get_stat_amount("AttackDamage"), 2)
 
 func _debug():
-	if not debug_mode:
-		return
-	
-	#$Label.text = str($RayCast2D.is_colliding())
-	$BottomRaycastDebug.text = str($Tumbling.is_colliding())#str(is_on_floor())#_is_bottom_raycasts_colliding())
-	$BottomRaycastDebug.visible = true
-	$Stunned.visible = bad_state == bad_states.STUNNED
+	if debug_mode:
+		#$Label.text = str($RayCast2D.is_colliding())
+		$BottomRaycastDebug.text = str($Tumbling.is_colliding())#str(is_on_floor())#_is_bottom_raycasts_colliding())
+		$BottomRaycastDebug.visible = true
+		$Stunned.visible = bad_state == bad_states.STUNNED
+
+func set_dimension(dimension : int) -> void:
+	current_dimension = dimension
+	match current_dimension:
+		dimensions.WORLD:
+			emit_signal("dimension_changed", "world")
+			Global.main_scene.get_node("UI/DimensionFX").material.set_shader_param("active", false)
+		dimensions.SPIRITUAL:
+			emit_signal("dimension_changed", "spiritual")
+			Global.main_scene.get_node("UI/DimensionFX").material.set_shader_param("active", true)
 
 func set_health(new_health):
+	if (hack & hacks.NO_DAMAGE) && new_health < health_point:
+		return
 	.set_health(new_health)
+
+func set_mana(new_mana):
+	if (hack & hacks.NO_MANA_USAGE) && new_mana < mana_point:
+		return
+	.set_mana(new_mana)
