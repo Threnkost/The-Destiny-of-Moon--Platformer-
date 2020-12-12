@@ -17,7 +17,7 @@ var last_check_point := {
 }
 
 func _ready():
-	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
+	#Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 
 	main_scene    = get_node("/root/Main")
 	stage_manager = main_scene.get_node("StageManager") 

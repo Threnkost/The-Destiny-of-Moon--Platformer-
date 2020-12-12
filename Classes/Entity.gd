@@ -19,6 +19,11 @@ enum bad_states {
 
 export (bool) var debug_mode        = false
 
+export (NodePath) var poison_tick_timer_path     = ""
+export (NodePath) var poison_duration_timer_path = ""
+onready var poison_tick_timer:Timer                    = get_node(poison_tick_timer_path)
+onready var poison_duration_timer:Timer                = get_node(poison_duration_timer_path)
+
 export (life_states) var life_state = life_states.LIVING setget set_life_state
 export (bad_states) var bad_state   = bad_states.NORMAL setget set_bad_state
 
@@ -45,11 +50,32 @@ var weight_y := 0.0
 var direction_x := 1
 var direction_y := 1
 
+var is_poisoned              := false
+var poison_damage_per_second := 0.0
+
 func _ready():
 	stats = $Stats
 
 	health_point = max_health_point
 	mana_point   = max_mana_point
+
+	if poison_tick_timer && poison_duration_timer:
+		poison_tick_timer.wait_time    = 1
+		poison_duration_timer.one_shot = true
+
+		poison_tick_timer.connect("timeout", self, "_on_Poison_tick")
+		poison_duration_timer.connect("timeout", self, "_on_Poison_ended")
+
+func _on_Poison_tick() -> void:
+	if is_poisoned:
+		var poison_damage = poison_damage_per_second * poison_tick_timer.wait_time
+		set_health(health_point - poison_damage)
+
+func _on_Poison_ended() -> void:
+	if is_poisoned:
+		is_poisoned = false
+		poison_duration_timer.wait_time = 0
+		poison_tick_timer.stop()
 
 func slide_opposite_horizontal(initial_sliding_x : float, final_sliding_x : float, weight : float) -> void:
 	slide(Vector2(initial_sliding_x, 0), Vector2(final_sliding_x, 0), Vector2(weight, 0), Vector2(-direction, 0))
@@ -89,6 +115,14 @@ func _debug() -> void:
 func die() -> void:
 	life_state = life_states.DEAD
 	
+func poison(duration := 0.5, damage_per_second := 1.0) -> void:
+	if poison_duration_timer && poison_tick_timer:
+		is_poisoned = true
+		poison_duration_timer.wait_time = duration
+		poison_damage_per_second = damage_per_second
+		poison_tick_timer.start()
+		poison_duration_timer.start()
+
 func damage(damager, damage, push_scale:=1) -> void:
 	pass
 

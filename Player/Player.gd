@@ -1,7 +1,5 @@
 extends Entity
 
-signal dimension_changed()
-
 const LOOK_UP_DISTANCE = 150
 
 const SNAP_LENGTH = 8.0
@@ -26,13 +24,10 @@ enum hacks {
 
 enum {
 	MOVING,
-	ATTACKING,
+	ATTACKING_SIDE,
+	ATTACKING_UP,
+	ATTACKING_DOWN,
 	TUMBLING,
-}
-
-enum dimensions {
-	WORLD,
-	SPIRITUAL
 }
 
 #NODES & RESOURCES
@@ -44,7 +39,6 @@ const ACCELERATION = 0.5
 const FRICTION     = 0.25
 
 var current_state     = MOVING setget set_state
-var current_dimension = dimensions.WORLD setget set_dimension
 
 var can_jump   := true
 var can_move   := true
@@ -77,6 +71,13 @@ func _ready():
 	.emit_signal("mana_point_changed", mana_point, max_mana_point)
 	.emit_signal("dimension_changed", "world")
 
+	#poison_duration_timer.connect("timeout", self, "_on_Poison_ended")
+	#poison(5.0, 1.0)
+
+func _on_Poison_ended() -> void:
+	._on_Poison_ended()
+	Global.main_scene.get_node("ScreenVFX/PoisonVFX").deactive()
+
 func _physics_process(delta):
 	$Label.text = str(falling_time)
 	$AnimationPlayer.playback_speed = 1.0
@@ -91,15 +92,6 @@ func _physics_process(delta):
 	velocity.y += GRAVITY
 	if velocity.y >= MAX_GRAVITY:
 		velocity.y = MAX_GRAVITY
-
-	if is_on_floor():#_is_bottom_raycasts_colliding():
-		velocity.y = 0
-		snap_velocity = SNAP_LENGTH * SNAP_DIRECTION
-		if falling_time >= 0.0:
-			if falling_time >= HIGH_FALLING_TIME && is_damagable():
-				set_health(health_point - 5)
-				stun(falling_time)
-			falling_time = 0.0
 			
 	if Global.current_ui_window:
 		velocity.x = 0
@@ -113,6 +105,15 @@ func _physics_process(delta):
 	#velocity.y = move_and_slide(velocity, Vector2.UP, true).y
 	velocity.y = move_and_slide_with_snap(get_total_velocity(), snap_velocity, 
 		Vector2.UP, true, 4, deg2rad(45.1)).y
+
+	if is_on_floor():#_is_bottom_raycasts_colliding():
+		velocity.y = 0
+		snap_velocity = SNAP_LENGTH * SNAP_DIRECTION
+		if falling_time >= 0.0:
+			if falling_time >= HIGH_FALLING_TIME && is_damagable():
+				set_health(health_point - 5)
+				stun(falling_time)
+			falling_time = 0.0
 
 func _check_direction():
 	$FirstAttackHitbox.scale.x  = direction
@@ -143,10 +144,6 @@ func _handle_inputs():
 		else:
 			Global.console.close()
 
-	if Input.is_action_just_pressed("DimensionTransition"):
-		var next_dimension = dimensions.WORLD if current_dimension == dimensions.SPIRITUAL else dimensions.SPIRITUAL
-		set_dimension(next_dimension)
-
 	if Global.current_ui_window:
 		return
 	
@@ -156,13 +153,9 @@ func _handle_inputs():
 			snap_velocity = Vector2.ZERO
 			velocity.y = -jumping_force * jump_strength
 
-	if Input.is_action_pressed("Attack") && current_state != ATTACKING && !attack_cooldown:
-		if bad_state != bad_states.STUNNED:
-			current_state = ATTACKING
-
-	if Input.is_action_pressed("Tumble") && velocity.x != 0 && _is_bottom_raycasts_colliding() && !tumbling_cooldown:
-		if bad_state != bad_states.STUNNED && current_state != TUMBLING && !$Tumbling.is_colliding():
-			current_state = TUMBLING
+	#if Input.is_action_pressed("Tumble") && velocity.x != 0 && _is_bottom_raycasts_colliding() && !tumbling_cooldown:
+	#	if bad_state != bad_states.STUNNED && current_state != TUMBLING && !$Tumbling.is_colliding():
+	#		current_state = TUMBLING
 
 	if Input.is_action_just_pressed("DamageMyself"):
 		damage(null, 1)
@@ -182,8 +175,12 @@ func _handle_states(delta):
 	match current_state:
 		MOVING:
 			_move()
-		ATTACKING:
-			_attack()
+		ATTACKING_SIDE:
+			state_machine_player.travel("Attack_side")
+		ATTACKING_UP:
+			state_machine_player.travel("Attack_up")
+		ATTACKING_DOWN:
+			state_machine_player.travel("Attack_down")
 		TUMBLING:
 			if $Tumbling.is_colliding():
 				current_state = MOVING
@@ -191,6 +188,10 @@ func _handle_states(delta):
 			#var anim_length = $AnimationPlayer.get_animation("Tumble").length
 			state_machine_player.travel("Tumble")
 			slide_directly_horizontal(tumbling_speed, 0, 0.2) 
+
+func poison(duration := 0.0, damage_per_second := 1.0) -> void:
+	.poison(duration, damage_per_second)
+	Global.main_scene.get_node("ScreenVFX/PoisonVFX").active()
 
 func stun(duration = 0.5) -> void:
 	if !(hack & hacks.NO_STUNNING):
@@ -220,6 +221,12 @@ func _move():
 		self.direction = -1
 	elif value > 0: #RIGHT
 		self.direction = 1
+		
+	if Input.is_action_pressed("Tumble") and value != 0:
+		if _is_bottom_raycasts_colliding() && !tumbling_cooldown:
+			if current_state != TUMBLING && !$Tumbling.is_colliding():
+				current_state = TUMBLING
+				return
 
 	if value != 0:
 		velocity.x = lerp(velocity.x, self.direction * speed * int(can_move), ACCELERATION)
@@ -306,16 +313,6 @@ func _debug():
 		$BottomRaycastDebug.text = str($Tumbling.is_colliding())#str(is_on_floor())#_is_bottom_raycasts_colliding())
 		$BottomRaycastDebug.visible = true
 		$Stunned.visible = bad_state == bad_states.STUNNED
-
-func set_dimension(dimension : int) -> void:
-	current_dimension = dimension
-	match current_dimension:
-		dimensions.WORLD:
-			emit_signal("dimension_changed", "world")
-			Global.main_scene.get_node("UI/DimensionFX").material.set_shader_param("active", false)
-		dimensions.SPIRITUAL:
-			emit_signal("dimension_changed", "spiritual")
-			Global.main_scene.get_node("UI/DimensionFX").material.set_shader_param("active", true)
 
 func set_health(new_health):
 	if (hack & hacks.NO_DAMAGE) && new_health < health_point:

@@ -12,6 +12,8 @@ func _ready():
 	health_bar = $Bars/HealthBar
 	mana_bar   = $Bars/ManaBar
 	
+	var test = load("res://UI/EffectIcon.tscn").instance()
+	test.add_to_ui("Poison", 5.0)
 
 func _physics_process(delta):
 	$Money/Label.text = str(Global.player.wallet.currencies["Gold"].value)	
@@ -20,14 +22,6 @@ func _physics_process(delta):
 	else:
 		$FPS.text = ""
 		
-
-func _on_Player_changed_dimension(dimension : String):
-	print("Dimension : ", dimension)
-	if dimension == "spiritual":
-		$Dimension.texture = DIMENSION_OF_THE_SPIRITS
-	elif dimension == "world":
-		$Dimension.texture = DIMENSION_OF_THE_WORLD
-
 
 func _on_Player_health_changed(hp, max_hp):
 	$Bars/HealthBar.true_max_value = max_hp

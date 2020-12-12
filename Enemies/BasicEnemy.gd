@@ -66,11 +66,6 @@ func _physics_process(delta) -> void:
 	$HealthBar.true_max_value = max_health_point
 	$HealthBar.true_value     = health_point
 
-	if Global.player.current_dimension != dimension:
-		modulate = Color(1,1,1,0.5)
-	else:
-		modulate = Color(1,1,1,1)
-
 	velocity.y += GRAVITY
 	if velocity.y >= MAX_GRAVITY:
 		velocity.y = MAX_GRAVITY

@@ -117,12 +117,12 @@ margin_left = 22.0
 margin_right = 40.0
 margin_bottom = 40.0
 
-[node name="Dimension" type="TextureRect" parent="."]
-margin_left = 136.0
-margin_top = 7.0
-margin_right = 152.0
-margin_bottom = 23.0
-rect_min_size = Vector2( 16, 16 )
+[node name="Effects" type="GridContainer" parent="."]
+margin_left = 5.0
+margin_top = 41.0
+margin_right = 90.0
+margin_bottom = 75.0
+rect_min_size = Vector2( 85, 34 )
 __meta__ = {
 "_edit_use_anchors_": false
 }

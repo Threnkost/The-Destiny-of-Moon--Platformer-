@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=2]
+[gd_scene load_steps=43 format=2]
 
 [ext_resource path="res://Player/Player.gd" type="Script" id=1]
 [ext_resource path="res://Assets/Sheets/Player/adventurer-Sheet.png" type="Texture" id=2]
@@ -8,9 +8,11 @@
 [ext_resource path="res://Themes/UI.tres" type="Theme" id=6]
 [ext_resource path="res://Classes/Wallet.gd" type="Script" id=7]
 [ext_resource path="res://Classes/Currency.gd" type="Script" id=8]
+[ext_resource path="res://Player/PlayerCombat.gd" type="Script" id=9]
 
 [sub_resource type="Animation" id=1]
-length = 0.6
+resource_name = "Attack_down"
+length = 0.325
 tracks/0/type = "value"
 tracks/0/path = NodePath("Sprite:frame")
 tracks/0/interp = 1
@@ -18,10 +20,10 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6 ),
-"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1 ),
+"times": PoolRealArray( 0.01, 0.15 ),
+"transitions": PoolRealArray( 1, 1 ),
 "update": 1,
-"values": [ 42, 43, 44, 45, 46, 47, 48 ]
+"values": [ 55, 56 ]
 }
 tracks/1/type = "method"
 tracks/1/path = NodePath(".")
@@ -30,45 +32,29 @@ tracks/1/loop_wrap = true
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/keys = {
-"times": PoolRealArray( 0.114106, 0.6 ),
-"transitions": PoolRealArray( 1, 1 ),
+"times": PoolRealArray( 0.3 ),
+"transitions": PoolRealArray( 1 ),
 "values": [ {
-"args": [ 300.0, 0.0, 0.2 ],
-"method": "slide_directly_horizontal"
-}, {
 "args": [ 0 ],
 "method": "set_state"
 } ]
 }
-tracks/2/type = "method"
-tracks/2/path = NodePath(".")
+tracks/2/type = "value"
+tracks/2/path = NodePath("Combat:attack_type")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/imported = false
 tracks/2/enabled = true
 tracks/2/keys = {
-"times": PoolRealArray( 0.6 ),
-"transitions": PoolRealArray( 1 ),
-"values": [ {
-"args": [ 1 ],
-"method": "set_attack_index"
-} ]
-}
-tracks/3/type = "value"
-tracks/3/path = NodePath("FirstAttackHitbox/FirstAttackHitbox:disabled")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/keys = {
-"times": PoolRealArray( 0.01, 0.199686, 0.25 ),
-"transitions": PoolRealArray( 1, 1, 1 ),
+"times": PoolRealArray( 0.01, 0.3 ),
+"transitions": PoolRealArray( 1, 1 ),
 "update": 1,
-"values": [ true, false, true ]
+"values": [ 3, 0 ]
 }
 
 [sub_resource type="Animation" id=2]
-length = 0.9
+resource_name = "Attack_side"
+length = 0.325
 tracks/0/type = "value"
 tracks/0/path = NodePath("Sprite:frame")
 tracks/0/interp = 1
@@ -76,10 +62,10 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9 ),
-"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
+"times": PoolRealArray( 0.01, 0.15 ),
+"transitions": PoolRealArray( 1, 1 ),
 "update": 1,
-"values": [ 49, 50, 51, 52, 53, 54, 55, 56, 57, 58 ]
+"values": [ 55, 56 ]
 }
 tracks/1/type = "method"
 tracks/1/path = NodePath(".")
@@ -88,109 +74,69 @@ tracks/1/loop_wrap = true
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/keys = {
-"times": PoolRealArray( 0.1, 0.9 ),
-"transitions": PoolRealArray( 1, 1 ),
+"times": PoolRealArray( 0.3 ),
+"transitions": PoolRealArray( 1 ),
 "values": [ {
-"args": [ 300.0, 0.0, 0.2 ],
-"method": "slide_directly_horizontal"
-}, {
 "args": [ 0 ],
 "method": "set_state"
 } ]
 }
-tracks/2/type = "method"
-tracks/2/path = NodePath(".")
+tracks/2/type = "value"
+tracks/2/path = NodePath("Combat:attack_type")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/imported = false
 tracks/2/enabled = true
 tracks/2/keys = {
-"times": PoolRealArray( 0.9 ),
-"transitions": PoolRealArray( 1 ),
-"values": [ {
-"args": [ 0 ],
-"method": "set_attack_index"
-} ]
-}
-tracks/3/type = "method"
-tracks/3/path = NodePath("Timers/CombinationCooldown")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/keys = {
-"times": PoolRealArray( 0.9 ),
-"transitions": PoolRealArray( 1 ),
-"values": [ {
-"args": [ -1 ],
-"method": "start"
-} ]
-}
-tracks/4/type = "method"
-tracks/4/path = NodePath(".")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/keys = {
-"times": PoolRealArray( 0.9 ),
-"transitions": PoolRealArray( 1 ),
-"values": [ {
-"args": [ true ],
-"method": "set_attack_cooldown"
-} ]
-}
-tracks/5/type = "value"
-tracks/5/path = NodePath("SecondAttackHitbox/SecondAttackHitbox:disabled")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/keys = {
-"times": PoolRealArray( 0.01, 0.1, 0.15 ),
-"transitions": PoolRealArray( 1, 1, 1 ),
+"times": PoolRealArray( 0.01, 0.3 ),
+"transitions": PoolRealArray( 1, 1 ),
 "update": 1,
-"values": [ true, false, true ]
-}
-tracks/6/type = "value"
-tracks/6/path = NodePath("ThirdAttackHitbox/ThirtAttackHitbox:disabled")
-tracks/6/interp = 1
-tracks/6/loop_wrap = true
-tracks/6/imported = false
-tracks/6/enabled = true
-tracks/6/keys = {
-"times": PoolRealArray( 0.00611283, 0.6, 0.652036 ),
-"transitions": PoolRealArray( 1, 1, 1 ),
-"update": 1,
-"values": [ true, false, true ]
-}
-tracks/7/type = "method"
-tracks/7/path = NodePath("AnimationPlayer")
-tracks/7/interp = 1
-tracks/7/loop_wrap = true
-tracks/7/imported = false
-tracks/7/enabled = true
-tracks/7/keys = {
-"times": PoolRealArray(  ),
-"transitions": PoolRealArray(  ),
-"values": [  ]
-}
-tracks/8/type = "method"
-tracks/8/path = NodePath(".")
-tracks/8/interp = 1
-tracks/8/loop_wrap = true
-tracks/8/imported = false
-tracks/8/enabled = true
-tracks/8/keys = {
-"times": PoolRealArray( 0.6 ),
-"transitions": PoolRealArray( 1 ),
-"values": [ {
-"args": [ 300.0, 0.0, 0.2 ],
-"method": "slide_directly_horizontal"
-} ]
+"values": [ 1, 0 ]
 }
 
 [sub_resource type="Animation" id=3]
+resource_name = "Attack_up"
+length = 0.325
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0.01, 0.15 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ 55, 56 ]
+}
+tracks/1/type = "method"
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0.3 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [ 0 ],
+"method": "set_state"
+} ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("Combat:attack_type")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0.01, 0.3 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ 2, 0 ]
+}
+
+[sub_resource type="Animation" id=4]
 length = 0.4
 loop = true
 tracks/0/type = "value"
@@ -242,7 +188,7 @@ tracks/3/keys = {
 "values": [ true ]
 }
 
-[sub_resource type="Animation" id=4]
+[sub_resource type="Animation" id=5]
 length = 0.6
 loop = true
 tracks/0/type = "value"
@@ -258,8 +204,7 @@ tracks/0/keys = {
 "values": [ 8, 9, 10, 11, 12, 13 ]
 }
 
-[sub_resource type="Animation" id=5]
-resource_name = "Stunned"
+[sub_resource type="Animation" id=6]
 length = 0.4
 loop = true
 tracks/0/type = "value"
@@ -275,8 +220,7 @@ tracks/0/keys = {
 "values": [ 59, 60, 61, 62 ]
 }
 
-[sub_resource type="Animation" id=6]
-resource_name = "Tumble"
+[sub_resource type="Animation" id=7]
 length = 0.4
 tracks/0/type = "value"
 tracks/0/path = NodePath("Sprite:frame")
@@ -357,43 +301,40 @@ tracks/5/keys = {
 } ]
 }
 
-[sub_resource type="AnimationNodeAnimation" id=7]
-animation = "Attack1"
-
 [sub_resource type="AnimationNodeAnimation" id=8]
-animation = "Attack2"
+animation = "Attack_down"
 
 [sub_resource type="AnimationNodeAnimation" id=9]
-animation = "Idle"
+animation = "Attack_side"
 
 [sub_resource type="AnimationNodeAnimation" id=10]
-animation = "Running"
+animation = "Attack_up"
 
 [sub_resource type="AnimationNodeAnimation" id=11]
-animation = "Stunned"
+animation = "Idle"
 
 [sub_resource type="AnimationNodeAnimation" id=12]
+animation = "Running"
+
+[sub_resource type="AnimationNodeAnimation" id=13]
+animation = "Stunned"
+
+[sub_resource type="AnimationNodeAnimation" id=14]
 animation = "Tumble"
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=13]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=14]
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=15]
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=16]
-switch_mode = 2
-auto_advance = true
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=17]
-switch_mode = 2
-auto_advance = true
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=18]
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=19]
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=20]
+switch_mode = 2
+auto_advance = true
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=21]
 
@@ -401,63 +342,97 @@ auto_advance = true
 switch_mode = 2
 auto_advance = true
 
-[sub_resource type="AnimationNodeStateMachine" id=23]
-states/Attack1/node = SubResource( 7 )
-states/Attack1/position = Vector2( 106, 193 )
-states/Attack2/node = SubResource( 8 )
-states/Attack2/position = Vector2( 106, 122 )
-states/Idle/node = SubResource( 9 )
+[sub_resource type="AnimationNodeStateMachineTransition" id=23]
+switch_mode = 2
+auto_advance = true
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=24]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=25]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=26]
+switch_mode = 2
+auto_advance = true
+
+[sub_resource type="AnimationNodeStateMachine" id=27]
+states/Attack_down/node = SubResource( 8 )
+states/Attack_down/position = Vector2( 57, 122 )
+states/Attack_side/node = SubResource( 9 )
+states/Attack_side/position = Vector2( 57, 201.291 )
+states/Attack_up/node = SubResource( 10 )
+states/Attack_up/position = Vector2( 57, 42.7282 )
+states/Idle/node = SubResource( 11 )
 states/Idle/position = Vector2( 279, 122 )
-states/Running/node = SubResource( 10 )
+states/Running/node = SubResource( 12 )
 states/Running/position = Vector2( 454, 122 )
-states/Stunned/node = SubResource( 11 )
+states/Stunned/node = SubResource( 13 )
 states/Stunned/position = Vector2( 279, 42.7282 )
-states/Tumble/node = SubResource( 12 )
+states/Tumble/node = SubResource( 14 )
 states/Tumble/position = Vector2( 454, 193 )
-transitions = [ "Idle", "Running", SubResource( 13 ), "Running", "Idle", SubResource( 14 ), "Idle", "Attack1", SubResource( 15 ), "Attack1", "Idle", SubResource( 16 ), "Attack2", "Idle", SubResource( 17 ), "Idle", "Attack2", SubResource( 18 ), "Idle", "Stunned", SubResource( 19 ), "Stunned", "Idle", SubResource( 20 ), "Idle", "Tumble", SubResource( 21 ), "Tumble", "Idle", SubResource( 22 ) ]
+transitions = [ "Idle", "Running", SubResource( 15 ), "Running", "Idle", SubResource( 16 ), "Idle", "Stunned", SubResource( 17 ), "Stunned", "Idle", SubResource( 18 ), "Idle", "Tumble", SubResource( 19 ), "Tumble", "Idle", SubResource( 20 ), "Idle", "Attack_up", SubResource( 21 ), "Attack_up", "Idle", SubResource( 22 ), "Attack_down", "Idle", SubResource( 23 ), "Idle", "Attack_down", SubResource( 24 ), "Idle", "Attack_side", SubResource( 25 ), "Attack_side", "Idle", SubResource( 26 ) ]
 start_node = "Idle"
-graph_offset = Vector2( 0, 38.6513 )
+graph_offset = Vector2( -75.6074, -8.70871 )
 
-[sub_resource type="AnimationNodeStateMachinePlayback" id=24]
+[sub_resource type="AnimationNodeStateMachinePlayback" id=28]
 
-[sub_resource type="DynamicFont" id=25]
+[sub_resource type="DynamicFont" id=29]
 font_data = ExtResource( 5 )
 
-[sub_resource type="ShaderMaterial" id=26]
+[sub_resource type="ShaderMaterial" id=30]
 
-[sub_resource type="RectangleShape2D" id=27]
+[sub_resource type="RectangleShape2D" id=31]
 extents = Vector2( 6, 15.0867 )
 
-[sub_resource type="RectangleShape2D" id=28]
+[sub_resource type="RectangleShape2D" id=32]
 extents = Vector2( 6.8922, 7 )
 
-[sub_resource type="CircleShape2D" id=29]
+[sub_resource type="CircleShape2D" id=33]
 radius = 4.12311
 
 [node name="Player" type="KinematicBody2D"]
 collision_layer = 2
 collision_mask = 5
 script = ExtResource( 1 )
+poison_tick_timer_path = NodePath("Timers/PoisonTick")
+poison_duration_timer_path = NodePath("Timers/PoisonDuration")
 max_health_point = 40
 max_mana_point = 40
 speed = 170.0
 tumbling_speed = 75.0
 jumping_force = 300.0
-hack = 13
+hack = 12
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-anims/Attack1 = SubResource( 1 )
-anims/Attack2 = SubResource( 2 )
-anims/Idle = SubResource( 3 )
-anims/Running = SubResource( 4 )
-anims/Stunned = SubResource( 5 )
-anims/Tumble = SubResource( 6 )
+anims/Attack_down = SubResource( 1 )
+anims/Attack_side = SubResource( 2 )
+anims/Attack_up = SubResource( 3 )
+anims/Idle = SubResource( 4 )
+anims/Running = SubResource( 5 )
+anims/Stunned = SubResource( 6 )
+anims/Tumble = SubResource( 7 )
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
-tree_root = SubResource( 23 )
+tree_root = SubResource( 27 )
 anim_player = NodePath("../AnimationPlayer")
 active = true
-parameters/playback = SubResource( 24 )
+parameters/playback = SubResource( 28 )
+
+[node name="Combat" type="Node2D" parent="."]
+script = ExtResource( 9 )
+attack_side_leaping_forward = 500
+attack_up_jump_force = -275
+
+[node name="AttackUpCooldown" type="Timer" parent="Combat"]
+wait_time = 0.1
+one_shot = true
+
+[node name="AttackDownCooldown" type="Timer" parent="Combat"]
+wait_time = 0.5
+one_shot = true
+
+[node name="AttackSideCooldown" type="Timer" parent="Combat"]
+wait_time = 0.3
+one_shot = true
 
 [node name="Stats" parent="." instance=ExtResource( 3 )]
 
@@ -483,7 +458,7 @@ wait_time = 0.25
 one_shot = true
 
 [node name="TumblingCooldown" type="Timer" parent="Timers"]
-wait_time = 0.25
+wait_time = 0.15
 one_shot = true
 
 [node name="FallingTime" type="Timer" parent="Timers"]
@@ -491,6 +466,10 @@ wait_time = 0.1
 autostart = true
 
 [node name="StunTime" type="Timer" parent="Timers"]
+
+[node name="PoisonTick" type="Timer" parent="Timers"]
+
+[node name="PoisonDuration" type="Timer" parent="Timers"]
 
 [node name="Wallet" type="Node" parent="."]
 script = ExtResource( 7 )
@@ -519,7 +498,7 @@ margin_left = -47.3868
 margin_top = -86.0972
 margin_right = 43.6132
 margin_bottom = -66.0972
-custom_fonts/font = SubResource( 25 )
+custom_fonts/font = SubResource( 29 )
 text = "Stunned"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -537,11 +516,11 @@ __meta__ = {
 }
 
 [node name="Sprite" type="Sprite" parent="."]
-material = SubResource( 26 )
+material = SubResource( 30 )
 texture = ExtResource( 2 )
 vframes = 11
 hframes = 7
-frame = 1
+frame = 3
 __meta__ = {
 "_edit_lock_": true
 }
@@ -549,7 +528,7 @@ __meta__ = {
 [node name="NormalCollisionShape" type="CollisionShape2D" parent="."]
 visible = false
 position = Vector2( 0, 2 )
-shape = SubResource( 27 )
+shape = SubResource( 31 )
 __meta__ = {
 "_edit_lock_": true
 }
@@ -557,7 +536,7 @@ __meta__ = {
 [node name="TumblingCollisionShape" type="CollisionShape2D" parent="."]
 visible = false
 position = Vector2( 0, 10 )
-shape = SubResource( 28 )
+shape = SubResource( 32 )
 disabled = true
 
 [node name="BottomRaycast1" type="RayCast2D" parent="."]
@@ -625,7 +604,7 @@ collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CameraDetection"]
 position = Vector2( 0, 2 )
-shape = SubResource( 29 )
+shape = SubResource( 33 )
 [connection signal="timeout" from="Timers/AttackCombinationTimer" to="." method="_on_AttackCombinationTimer_timeout"]
 [connection signal="timeout" from="Timers/CombinationCooldown" to="." method="_on_CombinationCooldown_timeout"]
 [connection signal="timeout" from="Timers/TumblingCooldown" to="." method="_on_TumblingCooldown_timeout"]
